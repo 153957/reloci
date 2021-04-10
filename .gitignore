@@ -1,5 +1,7 @@
 # specific
+build/
 demo/output/
+dist/
 
 # Python
 *.egg-info/
