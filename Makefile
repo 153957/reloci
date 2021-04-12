@@ -1,4 +1,4 @@
-.PHONY: flaketest unittests dist
+.PHONY: flaketest unittests dist install
 
 flaketest:
 	flake8
@@ -8,3 +8,7 @@ unittests:
 
 dist:
 	python -m build --sdist --wheel
+
+install:
+	pip install --upgrade pip
+	pip install --upgrade --upgrade-strategy eager --editable .[test]

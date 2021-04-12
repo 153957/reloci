@@ -13,8 +13,5 @@ jobs:
     - uses: actions/setup-python@v2
       with:
         python-version: '3.9'
-    - run: |
-        pip install --upgrade pip
-        pip install -e .
-    - run: |
-        make unittests
+    - run: make install
+    - run: make unittests
