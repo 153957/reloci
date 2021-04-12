@@ -10,14 +10,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v2
+    - uses: actions/setup-python@v2
       with:
         python-version: '3.9'
-    - name: Install Python dependencies
-      run: |
+    - run: |
         pip install --upgrade pip
         pip install -e .[test]
-    - name: Flake8
-      run: |
+    - run: |
         make flaketest
