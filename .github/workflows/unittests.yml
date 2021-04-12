@@ -1,4 +1,4 @@
-name: Run flake8 on Python code
+name: Run Python unitests
 
 on:
   push:
@@ -17,7 +17,7 @@ jobs:
     - name: Install Python dependencies
       run: |
         pip install --upgrade pip
-        pip install -e .[test]
-    - name: Flake8
+        pip install -e .
+    - name: Unittests
       run: |
-        make flaketest
+        make unittests
