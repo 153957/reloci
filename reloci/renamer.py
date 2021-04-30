@@ -25,6 +25,13 @@ class Renamer(BaseRenamer):
     def get_filename(self, file_info):
         """Try to create a unique filename for each photo"""
         if file_info.camera_model and file_info.shutter_count:
-            return f'{file_info.camera_serial}_{file_info.shutter_count:>06}{file_info.extension}'
+            return (
+                f'{file_info.camera_serial}_{file_info.shutter_count:>06}{file_info.extension}'
+                .replace('2225260_', 'ADL_')
+                .replace('4019215_', 'WEN_')
+                .replace('6037845_', 'APL_')
+                .replace('6795628_', 'ARN_')
+                .replace('4020135_', 'DSC_')
+            )
 
         return file_info.original_name
