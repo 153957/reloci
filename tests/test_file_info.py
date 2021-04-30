@@ -36,4 +36,4 @@ class FileInfoTestCase(unittest.TestCase):
         self.assertEqual('2021-04-02T13:00:02.670000', self.info.exif_datetime.isoformat())
 
     def test_creation_datetime(self):
-        self.assertEqual('2021-04-02T13:00:02.670000', self.info.creation_datetime.isoformat())
+        self.assertNotEqual('2021-04-02T13:00:02.670000', self.info.creation_datetime.isoformat())
