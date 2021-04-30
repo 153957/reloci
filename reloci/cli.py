@@ -3,8 +3,8 @@ import pathlib
 
 from importlib import import_module
 
-from reloci.worker import Worker
 from reloci.renamer import Renamer
+from reloci.worker import Worker
 
 
 def get_renamer_class(import_path):
