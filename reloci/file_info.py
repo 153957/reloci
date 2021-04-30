@@ -34,15 +34,29 @@ class FileInfo:
     def shutter_count(self):
         return str(self.tags.get('MakerNote TotalShutterReleases', ''))
 
-    def get_creation_datetime(self):
-        if self.tags:
-            date_time = self.tags['EXIF DateTimeOriginal']
-            subsec = self.tags.get('EXIF SubSecTimeOriginal', '0')
-            full_date_time = f'{date_time}.{subsec}'
-            image_date = datetime.strptime(full_date_time, '%Y:%m:%d %H:%M:%S.%f')
-        else:
-            # Fallback to file creation date if no EXIF is available
-            timestamp = self.file_stat.st_ctime
-            image_date = datetime.fromtimestamp(timestamp)
+    @property
+    def exif_datetime(self):
+        """Extract original capture date from EXIF
 
-        return image_date
+        Try to get an accurate time by including the subsecond component.
+        Raises KeyError if the date is not available in EXIF.
+
+        """
+        date_time = self.tags['EXIF DateTimeOriginal']
+        subsec = self.tags.get('EXIF SubSecTimeOriginal', '0')
+        full_date_time = f'{date_time}.{subsec}'
+        return datetime.strptime(full_date_time, '%Y:%m:%d %H:%M:%S.%f')
+
+    @property
+    def creation_datetime(self):
+        """Extract file creation date
+
+        These times are not always accurate file created dates.
+        Implementation also differ between operating systems.
+
+        """
+        try:
+            timestamp = self.file_stat.st_birthtime
+        except AttributeError:
+            timestamp = self.file_stat.st_ctime
+        return datetime.fromtimestamp(timestamp)

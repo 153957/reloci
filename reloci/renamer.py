@@ -1,13 +1,24 @@
 import pathlib
 
 
-class Renamer:
+class BaseRenamer:
+    def get_output_path(self, file_info):
+        """Placeholder method to indicate this should be implemented
+
+        An implementation of get_output_path gets FileInfo for the file being renamed
+        as argument and must return the new path, as a pathlib.Path object.
+
+        """
+        raise NotImplementedError('This method must be implemented.')
+
+
+class Renamer(BaseRenamer):
     def get_output_path(self, file_info):
         return self.get_filepath(file_info) / self.get_filename(file_info)
 
     def get_filepath(self, file_info):
         """Create a file path based on the capture date (with fallback for creation date)"""
-        file_date = file_info.get_creation_datetime()
+        file_date = file_info.exif_datetime
         file_path = file_date.strftime('%Y/%m/%y%m%d')
         return pathlib.Path(file_path)
 

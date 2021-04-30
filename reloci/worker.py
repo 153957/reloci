@@ -1,25 +1,31 @@
 import shutil
 
-from .planner import Planner
+from reloci.planner import Planner
 
 
 class Worker:
-    def __init__(self, args):
-        self.args = args
+    def __init__(self, inputpath, outputpath, move, dryrun, renamer):
+        self.inputpath = inputpath
+        self.outputpath = outputpath
+        self.renamer = renamer
+
+        self.move = move
+        self.dryrun = dryrun
 
     def do_the_thing(self):
         planner = Planner(
-            self.args.inputpath,
-            self.args.outputpath,
+            self.inputpath,
+            self.outputpath,
+            self.renamer,
         )
         plan = planner.make_plan()
 
-        if self.args.dryrun:
+        if self.dryrun:
             planner.show_plan(plan)
             return
 
         self.make_directories(plan.keys())
-        if self.args.move:
+        if self.move:
             self.move_files(plan)
         else:
             self.copy_files(plan)
