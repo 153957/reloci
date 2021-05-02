@@ -14,7 +14,7 @@ jobs:
         with:
           python-version: '3.9'
       - run: |
-          apt-get update
-          apt-get install libimage-exiftool-perl
+          sudo apt-get update
+          sudo apt-get install libimage-exiftool-perl
       - run: make install
       - run: make unittests
