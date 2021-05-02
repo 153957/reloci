@@ -2,13 +2,16 @@ import unittest
 
 from pathlib import Path
 
+from exiftool import ExifTool
+
 from reloci import file_info
 
 
 class FileInfoTestCase(unittest.TestCase):
     def setUp(self):
         self.image_path = Path(__file__).parent.parent / 'demo/source/APL_082158.NEF'
-        self.info = file_info.FileInfo(self.image_path)
+        with ExifTool() as exiftool:
+            self.info = file_info.FileInfo(self.image_path, exiftool)
 
     def test_init(self):
         self.assertEqual(self.image_path, self.info.file)

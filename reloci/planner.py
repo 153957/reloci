@@ -2,8 +2,8 @@ import collections
 import pathlib
 
 from dataclasses import dataclass
-from functools import partial
-from multiprocessing import Pool
+
+from exiftool import ExifTool
 
 from reloci.file_info import FileInfo
 
@@ -14,11 +14,6 @@ class Map:
     destination: pathlib.Path
 
 
-def get_output_path(input_path, output_root, renamer):
-    file_info = FileInfo(input_path)
-    return input_path, output_root / renamer.get_output_path(file_info)
-
-
 class Planner:
     def __init__(self, inputpath, outputpath, renamer):
         self.input_root = inputpath
@@ -27,8 +22,12 @@ class Planner:
 
     def get_files(self):
         for path in self.input_root.rglob('*'):
-            if path.is_file() and not path.is_symlink():
+            if path.is_file() and not path.is_symlink() and not path.name.startswith('.'):
                 yield path
+
+    def get_output_path(self, input_path, exiftool):
+        file_info = FileInfo(input_path, exiftool)
+        return self.output_root / self.renamer.get_output_path(file_info)
 
     def make_plan(self):
         """Create a mapping to know which input files go where in the output"""
@@ -38,18 +37,15 @@ class Planner:
 
         input_paths = self.get_files()
 
-        output_path_getter = partial(
-            get_output_path,
-            output_root=self.output_root,
-            renamer=self.renamer,
-        )
+        with ExifTool() as exiftool:
+            for input_path in input_paths:
+                output_path = self.get_output_path(input_path, exiftool)
 
-        with Pool() as pool:
-            for input_path, output_path in pool.imap_unordered(output_path_getter, input_paths):
                 if output_path in destinations:
-                    raise Exception(f'Multiple files have the same destination! {output_path}')
+                    raise Exception(f'Multiple files have the same destination! {output_path}.')
 
                 destinations.add(output_path)
+
                 plan[output_path.parent].append(
                     Map(
                         source=input_path,

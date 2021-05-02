@@ -1,14 +1,21 @@
+import contextlib
+
 from datetime import datetime
 
-import exifreader
+TAGS = [
+    'Composite:SubSecDateTimeOriginal',
+    'EXIF:DateTimeOriginal',
+    'EXIF:Model',
+    'MakerNotes:DateTimeOriginal',
+    'MakerNotes:SerialNumber',
+    'MakerNotes:ShutterCount',
+]
 
 
 class FileInfo:
-    def __init__(self, path):
+    def __init__(self, path, exiftool):
         self.file = path
-
-        with self.file.open('rb') as _file:
-            self.tags = exifreader.process_file(_file, details=True)
+        self.tags = exiftool.get_tags(TAGS, str(path))
 
     @property
     def extension(self):
@@ -24,15 +31,15 @@ class FileInfo:
 
     @property
     def camera_model(self):
-        return str(self.tags.get('Image Model', ''))
+        return str(self.tags.get('EXIF:Model', ''))
 
     @property
     def camera_serial(self):
-        return str(self.tags.get('MakerNote SerialNumber', ''))
+        return str(self.tags.get('MakerNotes:SerialNumber', ''))
 
     @property
     def shutter_count(self):
-        return str(self.tags.get('MakerNote TotalShutterReleases', ''))
+        return str(self.tags.get('MakerNotes:ShutterCount', ''))
 
     @property
     def exif_datetime(self):
@@ -42,10 +49,19 @@ class FileInfo:
         Raises KeyError if the date is not available in EXIF.
 
         """
-        date_time = self.tags['EXIF DateTimeOriginal']
-        subsec = self.tags.get('EXIF SubSecTimeOriginal', '0')
-        full_date_time = f'{date_time}.{subsec}'
-        return datetime.strptime(full_date_time, '%Y:%m:%d %H:%M:%S.%f')
+        with contextlib.suppress(KeyError):
+            date_time_original = self.tags['Composite:SubSecDateTimeOriginal']
+            return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S.%f')
+
+        with contextlib.suppress(KeyError):
+            date_time_original = self.tags['MakerNotes:DateTimeOriginal']
+            return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S')
+
+        with contextlib.suppress(KeyError):
+            date_time_original = self.tags['EXIF:DateTimeOriginal']
+            return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S')
+
+        raise LookupError(f'Did not find original date in EXIF of {self.file}')
 
     @property
     def creation_datetime(self):
