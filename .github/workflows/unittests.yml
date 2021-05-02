@@ -13,5 +13,8 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: '3.9'
+      - run: |
+          apt-get update
+          apt-get install libimage-exiftool-perl
       - run: make install
       - run: make unittests
