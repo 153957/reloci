@@ -46,7 +46,7 @@ class FileInfo:
         """Extract original capture date from EXIF
 
         Try to get an accurate time by including the subsecond component.
-        Raises KeyError if the date is not available in EXIF.
+        Raises LookupError if the date is not available in EXIF.
 
         """
         with contextlib.suppress(KeyError):
