@@ -28,9 +28,9 @@ class Renamer(BaseRenamer):
                 f'{file_info.camera_serial}_{file_info.shutter_count:>06}{file_info.extension}'
                 .replace('2225260_', 'ADL_')
                 .replace('4019215_', 'WEN_')
+                .replace('4020135_', 'DSC_')
                 .replace('6037845_', 'APL_')
                 .replace('6795628_', 'ARN_')
-                .replace('4020135_', 'DSC_')
             )
 
         return file_info.original_name
