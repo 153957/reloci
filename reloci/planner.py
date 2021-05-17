@@ -45,7 +45,10 @@ class Planner:
                 output_path = self.get_output_path(input_path, exiftool)
 
                 if output_path in destinations:
-                    raise Exception(f'Multiple files have the same destination! {output_path}.')
+                    raise Exception(f'Multiple files have the same destination!\n {input_path}\t→\t{output_path}.')
+
+                if output_path.is_file():
+                    raise Exception(f'A file already exists at destination path!\n {input_path}\t→\t{output_path}.')
 
                 destinations.add(output_path)
 
