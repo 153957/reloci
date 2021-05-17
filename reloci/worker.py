@@ -1,5 +1,7 @@
 import shutil
 
+from tqdm import tqdm
+
 from reloci.planner import Planner
 
 
@@ -34,12 +36,17 @@ class Worker:
         for directory in directories:
             directory.mkdir(parents=True, exist_ok=True)
 
+    def flatten_plan(self, plan):
+        return [
+            mapping
+            for mappings in plan.values()
+            for mapping in mappings
+        ]
+
     def move_files(self, plan):
-        for mappings in plan.values():
-            for mapping in mappings:
-                shutil.move(mapping.source, mapping.destination)
+        for mapping in tqdm(self.flatten_plan(plan), desc='Moving files', dynamic_ncols=True):
+            shutil.move(mapping.source, mapping.destination)
 
     def copy_files(self, plan):
-        for mappings in plan.values():
-            for mapping in mappings:
-                shutil.copy2(mapping.source, mapping.destination)
+        for mapping in tqdm(self.flatten_plan(plan), desc='Copying files', dynamic_ncols=True):
+            shutil.copy2(mapping.source, mapping.destination)

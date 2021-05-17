@@ -4,6 +4,7 @@ import pathlib
 from dataclasses import dataclass
 
 from exiftool import ExifTool
+from tqdm import tqdm
 
 from reloci.file_info import FileInfo
 
@@ -21,9 +22,11 @@ class Planner:
         self.renamer = renamer()
 
     def get_files(self):
-        for path in self.input_root.rglob('*'):
-            if path.is_file() and not path.is_symlink() and not path.name.startswith('.'):
-                yield path
+        return [
+            path
+            for path in self.input_root.rglob('*')
+            if path.is_file() and not path.is_symlink() and not path.name.startswith('.')
+        ]
 
     def get_output_path(self, input_path, exiftool):
         file_info = FileInfo(input_path, exiftool)
@@ -38,7 +41,7 @@ class Planner:
         input_paths = self.get_files()
 
         with ExifTool() as exiftool:
-            for input_path in input_paths:
+            for input_path in tqdm(input_paths, desc='Reading input', dynamic_ncols=True):
                 output_path = self.get_output_path(input_path, exiftool)
 
                 if output_path in destinations:
