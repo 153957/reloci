@@ -16,5 +16,5 @@ jobs:
       - run: |
           sudo apt-get update
           sudo apt-get install libimage-exiftool-perl
-      - run: make install
+      - run: make devinstall
       - run: make unittests
