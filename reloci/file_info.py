@@ -5,6 +5,7 @@ from datetime import datetime
 TAGS = [
     'Composite:SubSecDateTimeOriginal',
     'EXIF:DateTimeOriginal',
+    'EXIF:Make',
     'EXIF:Model',
     'MakerNotes:DateTimeOriginal',
     'MakerNotes:SerialNumber',
@@ -28,6 +29,10 @@ class FileInfo:
     @property
     def file_stat(self):
         return self.file.stat()
+
+    @property
+    def camera_make(self):
+        return str(self.tags.get('EXIF:Make', ''))
 
     @property
     def camera_model(self):
