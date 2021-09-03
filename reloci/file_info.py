@@ -56,15 +56,24 @@ class FileInfo:
         """
         with contextlib.suppress(KeyError):
             date_time_original = self.tags['Composite:SubSecDateTimeOriginal']
-            return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S.%f')
+            try:
+                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S.%f%z')
+            except ValueError:
+                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S.%f')
 
         with contextlib.suppress(KeyError):
             date_time_original = self.tags['MakerNotes:DateTimeOriginal']
-            return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S')
+            try:
+                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S%z')
+            except ValueError:
+                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S')
 
         with contextlib.suppress(KeyError):
             date_time_original = self.tags['EXIF:DateTimeOriginal']
-            return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S')
+            try:
+                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S%z')
+            except ValueError:
+                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S')
 
         raise LookupError(f'Did not find original date in EXIF of {self.file}')
 
