@@ -1,6 +1,6 @@
 import contextlib
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 TAGS = [
     'Composite:SubSecDateTimeOriginal',
@@ -53,27 +53,29 @@ class FileInfo:
         Try to get an accurate time by including the subsecond component.
         Raises LookupError if the date is not available in EXIF.
 
+        Assume UTC timezone when not available from EXIF.
+
         """
         with contextlib.suppress(KeyError):
             date_time_original = self.tags['Composite:SubSecDateTimeOriginal']
             try:
                 return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S.%f%z')
             except ValueError:
-                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S.%f')
+                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S.%f').replace(tzinfo=timezone.utc)
 
         with contextlib.suppress(KeyError):
             date_time_original = self.tags['MakerNotes:DateTimeOriginal']
             try:
                 return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S%z')
             except ValueError:
-                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S')
+                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S').replace(tzinfo=timezone.utc)
 
         with contextlib.suppress(KeyError):
             date_time_original = self.tags['EXIF:DateTimeOriginal']
             try:
                 return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S%z')
             except ValueError:
-                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S')
+                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S').replace(tzinfo=timezone.utc)
 
         raise LookupError(f'Did not find original date in EXIF of {self.file}')
 

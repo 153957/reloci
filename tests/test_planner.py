@@ -38,7 +38,7 @@ class PlannerTestCase(unittest.TestCase):
             ('APL_082158.NEF', '2021/04/210402/APL_082158.NEF'),
             ('APS_003129.MOV', '2021/05/210501/APS_003129.MOV'),
             ('DSC_064662.NEF', '2009/01/090106/DSC_064662.NEF'),
-            ('IMG_6828.JPG', '2019/04/190430/CLK_jv3r886e.JPG'),
+            ('IMG_6828.JPG', '2019/04/190430/CLK_jv3vijqe.JPG'),
             ('IMG_9895.JPG', '2020/03/200320/CLK_k80cid1l.JPG'),
             # ('IMG_9895.MOV', '2020/03/200320/IMG_9895.MOV'),
             ('IMG_054762.JPG', '2006/10/061025/IMG_054762.JPG'),
