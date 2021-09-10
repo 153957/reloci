@@ -40,6 +40,7 @@ class Renamer(BaseRenamer):
             return (
                 f'{file_info.camera_model}_{encoded_timestamp}{file_info.extension}'
                 .replace('iPhone SE_', 'CLK_')
+                .replace('iPhone SE (1st generation)_', 'CLK_')
                 .replace('iPad Pro (10.5-inch)_', 'PAD_')
             )
 
