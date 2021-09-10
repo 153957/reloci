@@ -1,5 +1,7 @@
 import pathlib
 
+import baseconv
+
 
 class BaseRenamer:
     def get_output_path(self, file_info):
@@ -31,6 +33,15 @@ class Renamer(BaseRenamer):
                 .replace('4020135_', 'DSC_')
                 .replace('6037845_', 'APL_')
                 .replace('6795628_', 'ARN_')
+            )
+        elif file_info.camera_make == 'Apple':
+            timestamp = int(1000 * file_info.exif_datetime.timestamp())
+            encoded_timestamp = baseconv.base36.encode(timestamp)
+            return (
+                f'{file_info.camera_model}_{encoded_timestamp}{file_info.extension}'
+                .replace('iPhone SE_', 'CLK_')
+                .replace('iPhone SE (1st generation)_', 'CLK_')
+                .replace('iPad Pro (10.5-inch)_', 'PAD_')
             )
 
         return file_info.original_name
