@@ -14,6 +14,32 @@ class BaseRenamer:
         raise NotImplementedError('This method must be implemented.')
 
 
+class DateTimeRenamer(BaseRenamer):
+    """Rename files based on exif date
+
+    The resulting file path will be:
+
+        '%Y/%m/%d/%Y%m%d_%H%M%S_%f.{extension}'
+
+    For example:
+
+        '2021/07/23/20210723_110242_351000.NEF'
+
+    """
+
+    def get_output_path(self, file_info):
+        return self.get_filepath(file_info) / self.get_filename(file_info)
+
+    def get_filepath(self, file_info):
+        """Create a file path based on the capture date (with fallback for creation date)"""
+        file_path = file_info.exif_datetime.strftime('%Y/%m/%y%m%d')
+        return pathlib.Path(file_path)
+
+    def get_filename(self, file_info):
+        """Try to create a unique filename for each photo"""
+        return file_info.exif_datetime.strftime(f'%Y%m%d_%H%M%S_%f{file_info.extension}')
+
+
 class Renamer(BaseRenamer):
     def get_output_path(self, file_info):
         return self.get_filepath(file_info) / self.get_filename(file_info)
