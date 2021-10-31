@@ -65,6 +65,7 @@ class Renamer(BaseRenamer):
             encoded_timestamp = baseconv.base36.encode(timestamp)
             return (
                 f'{file_info.camera_model}_{encoded_timestamp}{file_info.extension}'
+                .replace('iPhone 13 mini_', 'TRM_')
                 .replace('iPhone SE_', 'CLK_')
                 .replace('iPhone SE (1st generation)_', 'CLK_')
                 .replace('iPad Pro (10.5-inch)_', 'PAD_')
