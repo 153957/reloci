@@ -29,8 +29,25 @@ class Planner:
         ]
 
     def get_output_path(self, input_path, exiftool):
-        file_info = FileInfo(input_path, exiftool)
-        return self.output_root / self.renamer.get_output_path(file_info)
+        try:
+            file_info = FileInfo(input_path, exiftool)
+            return self.output_root / self.renamer.get_output_path(file_info)
+        except LookupError:
+            return self.get_output_path_from_counterpart(input_path, exiftool)
+
+    def get_output_path_from_counterpart(self, input_path, exiftool):
+        try:
+            counterpart_path = next(
+                path
+                for path in input_path.parent.rglob(f'{input_path.stem}.*')
+                if path != input_path
+            )
+        except StopIteration:
+            raise LookupError('Unable to find a counterpart file')
+
+        file_info = FileInfo(counterpart_path, exiftool)
+        file_path = self.renamer.get_output_path(file_info)
+        return self.output_root / file_path.parent / (file_path.stem + input_path.suffix)
 
     def make_plan(self):
         """Create a mapping to know which input files go where in the output"""
