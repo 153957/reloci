@@ -1,5 +1,3 @@
-import contextlib
-
 from datetime import datetime, timezone
 
 TAGS = [
@@ -10,6 +8,11 @@ TAGS = [
     'MakerNotes:DateTimeOriginal',
     'MakerNotes:SerialNumber',
     'MakerNotes:ShutterCount',
+    'MakerNotes:Make',
+    'MakerNotes:Model',
+    'QuickTime:CreationDate',
+    'QuickTime:Make',
+    'QuickTime:Model',
 ]
 
 
@@ -32,11 +35,19 @@ class FileInfo:
 
     @property
     def camera_make(self):
-        return str(self.tags.get('EXIF:Make', ''))
+        for tag in ('EXIF:Make', 'QuickTime:Make', 'MakerNotes:Make'):
+            if tag in self.tags:
+                return self.tags[tag]
+
+        raise LookupError(f'Did not find camera make in EXIF of {self.file}')
 
     @property
     def camera_model(self):
-        return str(self.tags.get('EXIF:Model', ''))
+        for tag in ('EXIF:Model', 'QuickTime:Model', 'MakerNotes:Model'):
+            if tag in self.tags:
+                return self.tags[tag]
+
+        raise LookupError(f'Did not find camera model in EXIF of {self.file}')
 
     @property
     def camera_serial(self):
@@ -56,26 +67,25 @@ class FileInfo:
         Assume UTC timezone when not available from EXIF.
 
         """
-        with contextlib.suppress(KeyError):
-            date_time_original = self.tags['Composite:SubSecDateTimeOriginal']
+        tag = 'Composite:SubSecDateTimeOriginal'
+        if tag in self.tags:
+            date_time_original = self.tags[tag]
             try:
                 return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S.%f%z')
             except ValueError:
                 return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S.%f').replace(tzinfo=timezone.utc)
 
-        with contextlib.suppress(KeyError):
-            date_time_original = self.tags['MakerNotes:DateTimeOriginal']
-            try:
-                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S%z')
-            except ValueError:
-                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S').replace(tzinfo=timezone.utc)
-
-        with contextlib.suppress(KeyError):
-            date_time_original = self.tags['EXIF:DateTimeOriginal']
-            try:
-                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S%z')
-            except ValueError:
-                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S').replace(tzinfo=timezone.utc)
+        for tag in (
+            'MakerNotes:DateTimeOriginal',
+            'EXIF:DateTimeOriginal',
+            'QuickTime:CreationDate',
+        ):
+            if tag in self.tags:
+                date_time_original = self.tags[tag]
+                try:
+                    return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S%z')
+                except ValueError:
+                    return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S').replace(tzinfo=timezone.utc)
 
         raise LookupError(f'Did not find original date in EXIF of {self.file}')
 
