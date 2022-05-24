@@ -58,8 +58,8 @@ class FileInfo:
         return str(self.tags.get('MakerNotes:ShutterCount', ''))
 
     @property
-    def exif_datetime(self):
-        """Extract original capture date from EXIF
+    def subsecond_datetime(self):
+        """Extract subsecond accurate original capture date from EXIF
 
         Try to get an accurate time by including the subsecond component.
         Raises LookupError if the date is not available in EXIF.
@@ -75,6 +75,18 @@ class FileInfo:
             except ValueError:
                 return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S.%f').replace(tzinfo=timezone.utc)
 
+        raise LookupError(f'Did not find accurate date in EXIF of {self.file}')
+
+    @property
+    def datetime(self):
+        """Extract second accurate original capture date from EXIF
+
+        Try to get the capture time accurate to second.
+        Raises LookupError if the date is not available in EXIF.
+
+        Assume UTC timezone when not available from EXIF.
+
+        """
         for tag in (
             'MakerNotes:DateTimeOriginal',
             'EXIF:DateTimeOriginal',

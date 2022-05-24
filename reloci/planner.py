@@ -33,14 +33,18 @@ class Planner:
             file_info = FileInfo(input_path, exiftool)
             return self.output_root / self.renamer.get_output_path(file_info)
         except LookupError:
-            return self.get_output_path_from_counterpart(input_path, exiftool)
+            try:
+                return self.get_output_path_from_counterpart(input_path, exiftool)
+            except LookupError:
+                if hasattr(self.renamer, 'get_fallback_output_path'):
+                    return self.output_root / self.renamer.get_fallback_output_path(file_info)
 
     def get_output_path_from_counterpart(self, input_path, exiftool):
         try:
             counterpart_path = next(
                 path
                 for path in input_path.parent.rglob(f'{input_path.stem}.*')
-                if path != input_path
+                if path != input_path and path.suffix.casefold() != '.aae'
             )
         except StopIteration:
             raise LookupError('Unable to find a counterpart file')
