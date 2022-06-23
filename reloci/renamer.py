@@ -59,6 +59,7 @@ class Renamer(BaseRenamer):
                 .replace('4020135_', 'DSC_')
                 .replace('6037845_', 'APL_')
                 .replace('6795628_', 'ARN_')
+                .replace('6023198_', 'TED_')
             )
         elif file_info.camera_make == 'Apple':
             timestamp = int(1000 * file_info.exif_datetime.timestamp())
