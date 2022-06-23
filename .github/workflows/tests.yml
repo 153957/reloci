@@ -5,7 +5,7 @@ on:
 
 jobs:
   flake8:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-22.04'
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -15,7 +15,7 @@ jobs:
       - run: make flaketest
 
   unittest:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-22.04'
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -28,7 +28,7 @@ jobs:
       - run: make unittests
 
   checksetup:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-22.04'
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2

@@ -19,7 +19,7 @@ TAGS = [
 class FileInfo:
     def __init__(self, path, exiftool):
         self.file = path
-        self.tags = exiftool.get_tags(TAGS, str(path))
+        self.tags = exiftool.get_tags(str(path), TAGS)[0]
 
     @property
     def extension(self):

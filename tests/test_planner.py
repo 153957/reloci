@@ -2,7 +2,7 @@ import unittest
 
 from pathlib import Path
 
-from exiftool import ExifTool
+from exiftool import ExifToolHelper
 
 from reloci import planner, renamer
 
@@ -46,7 +46,10 @@ class PlannerTestCase(unittest.TestCase):
             ('IMG_054762.JPG', '2006/10/061025/IMG_054762.JPG'),
             ('JYBF8578.DNG', '2020/10/201018/CLK_kgex8fen.DNG'),
         ]
-        with ExifTool() as exiftool:
+        with ExifToolHelper() as exiftool:
             for source_file, output_path in combinations:
                 with self.subTest(source_path=source_file):
-                    self.assertEqual(self.output / output_path, self.planner.get_output_path(self.source / source_file, exiftool))
+                    self.assertEqual(
+                        self.output / output_path,
+                        self.planner.get_output_path(self.source / source_file, exiftool),
+                    )

@@ -2,7 +2,7 @@ import unittest
 
 from pathlib import Path
 
-from exiftool import ExifTool
+from exiftool import ExifToolHelper
 
 from reloci import file_info
 
@@ -10,7 +10,7 @@ from reloci import file_info
 class FileInfoTestCase(unittest.TestCase):
     def setUp(self):
         self.image_path = Path(__file__).parent.parent / 'demo/source/APL_082158.NEF'
-        with ExifTool() as exiftool:
+        with ExifToolHelper() as exiftool:
             self.info = file_info.FileInfo(self.image_path, exiftool)
 
     def test_init(self):

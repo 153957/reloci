@@ -23,16 +23,37 @@ class BaseRenamer:
         raise NotImplementedError('This method must be implemented.')
 
 
+class DatePathRenamer(BaseRenamer):
+    """Do not rename files, but group them by date
+
+    The resulting file path will be:
+
+        '%Y/%m/%y%m%d/{original_name}.{extension}'
+
+    For example:
+
+        '2021/07/210723/DSC_7346.NEF'
+
+    """
+    def get_output_path(self, file_info):
+        return self.get_filepath(file_info) / file_info.original_name
+
+    def get_filepath(self, file_info):
+        """Create a file path based on the capture date (with fallback for creation date)"""
+        file_path = file_info.exif_datetime.strftime('%Y/%m/%y%m%d')
+        return pathlib.Path(file_path)
+
+
 class DateTimeRenamer(BaseRenamer):
     """Rename files based on exif date
 
     The resulting file path will be:
 
-        '%Y/%m/%d/%Y%m%d_%H%M%S_%f.{extension}'
+        '%Y/%m/%y%m%d/%Y%m%d_%H%M%S_%f.{extension}'
 
     For example:
 
-        '2021/07/23/20210723_110242_351000.NEF'
+        '2021/07/210723/20210723_110242_351000.NEF'
 
     """
 
@@ -53,6 +74,19 @@ class DateTimeRenamer(BaseRenamer):
 
 
 class Renamer(BaseRenamer):
+    """Rename files based on camera serial and shutter count or model and encoded timestamp
+
+    The resulting file path will be:
+
+        '%Y/%m/%y%m%d/{prefix}_{shutter}.{extension}'
+        '%Y/%m/%y%m%d/{prefix}_{encoded_timestamp}.{extension}'
+
+    For example:
+
+        '2021/07/210723/APL_042107.NEF'
+        '2020/03/200320/CLK_k80cid1l.JPG'
+
+    """
     def get_output_path(self, file_info):
         return self.get_filepath(file_info) / self.get_filename(file_info)
 
@@ -74,6 +108,7 @@ class Renamer(BaseRenamer):
                 .replace('4020135_', 'DSC_')
                 .replace('6037845_', 'APL_')
                 .replace('6795628_', 'ARN_')
+                .replace('6023198_', 'TED_')
             )
         elif file_info.camera_make == 'Apple':
             timestamp = int(1000 * file_info.subsecond_datetime.timestamp())

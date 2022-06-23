@@ -3,7 +3,7 @@ import pathlib
 
 from dataclasses import dataclass
 
-from exiftool import ExifTool
+from exiftool import ExifToolHelper
 from tqdm import tqdm
 
 from reloci.file_info import FileInfo
@@ -61,7 +61,7 @@ class Planner:
 
         input_paths = self.get_files()
 
-        with ExifTool() as exiftool:
+        with ExifToolHelper() as exiftool:
             for input_path in tqdm(input_paths, desc='Reading input', dynamic_ncols=True):
                 output_path = self.get_output_path(input_path, exiftool)
 
