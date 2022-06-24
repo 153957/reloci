@@ -35,8 +35,11 @@ class FileInfoTestCase(unittest.TestCase):
     def test_shutter_count(self):
         self.assertEqual('82158', self.info.shutter_count)
 
-    def test_exif_datetime(self):
-        self.assertEqual('2021-04-02T13:00:02.670000+00:00', self.info.exif_datetime.isoformat())
+    def test_subsecond_datetime(self):
+        self.assertEqual('2021-04-02T13:00:02.670000+00:00', self.info.subsecond_datetime.isoformat())
+
+    def test_datetime(self):
+        self.assertEqual('2021-04-02T13:00:02+00:00', self.info.datetime.isoformat())
 
     def test_creation_datetime(self):
         self.assertNotEqual('2021-04-02T13:00:02.670000', self.info.creation_datetime.isoformat())
