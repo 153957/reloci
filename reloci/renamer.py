@@ -38,6 +38,9 @@ class DatePathRenamer(BaseRenamer):
     def get_output_path(self, file_info):
         return self.get_filepath(file_info) / file_info.original_name
 
+    def get_fallback_output_path(self, file_info):
+        return self.get_output_path(file_info)
+
     def get_filepath(self, file_info):
         """Create a file path based on the capture date (with fallback for creation date)"""
         file_path = file_info.datetime.strftime('%Y/%m/%y%m%d')
@@ -59,6 +62,9 @@ class DateTimeRenamer(BaseRenamer):
 
     def get_output_path(self, file_info):
         return self.get_filepath(file_info) / self.get_filename(file_info)
+
+    def get_fallback_output_path(self, file_info):
+        return self.get_output_path(file_info)
 
     def get_filepath(self, file_info):
         """Create a file path based on the capture date (with fallback for creation date)"""
