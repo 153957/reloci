@@ -5,6 +5,7 @@ TAGS = [
     'EXIF:DateTimeOriginal',
     'EXIF:Make',
     'EXIF:Model',
+    'EXIF:SerialNumber',
     'MakerNotes:DateTimeOriginal',
     'MakerNotes:SerialNumber',
     'MakerNotes:ShutterCount',
@@ -13,6 +14,8 @@ TAGS = [
     'QuickTime:CreationDate',
     'QuickTime:Make',
     'QuickTime:Model',
+    'XMP:ImageNumber',
+    'XMP:SerialNumber',
 ]
 
 
@@ -51,11 +54,19 @@ class FileInfo:
 
     @property
     def camera_serial(self):
-        return str(self.tags.get('MakerNotes:SerialNumber', ''))
+        for tag in ('MakerNotes:SerialNumber', 'EXIF:SerialNumber', 'XMP:SerialNumber'):
+            if tag in self.tags:
+                return str(self.tags[tag])
+
+        return ''
 
     @property
     def shutter_count(self):
-        return str(self.tags.get('MakerNotes:ShutterCount', ''))
+        for tag in ('MakerNotes:ShutterCount', 'XMP:ImageNumber'):
+            if tag in self.tags:
+                return str(self.tags[tag])
+
+        return ''
 
     @property
     def subsecond_datetime(self):
