@@ -2,6 +2,7 @@ import collections
 import pathlib
 
 from dataclasses import dataclass
+from operator import attrgetter
 
 from exiftool import ExifToolHelper
 from tqdm import tqdm
@@ -85,5 +86,5 @@ class Planner:
     def show_plan(self, plan):
         for directory, mappings in plan.items():
             print(f'{directory}')
-            for mapping in mappings:
+            for mapping in sorted(mappings, key=attrgetter('destination')):
                 print(f' {mapping.source}\t→\t{mapping.destination}')
