@@ -86,11 +86,13 @@ class Renamer(BaseRenamer):
 
         '%Y/%m/%y%m%d/{prefix}_{shutter}.{extension}'
         '%Y/%m/%y%m%d/{prefix}_{encoded_timestamp}.{extension}'
+        '%Y/%m/%y%m%d/{original_name}'
 
     For example:
 
         '2021/07/210723/APL_042107.NEF'
         '2020/03/200320/CLK_k80cid1l.JPG'
+        '2021/07/210723/APS_8297.MOV'
 
     """
     def get_output_path(self, file_info):
