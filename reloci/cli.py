@@ -3,6 +3,10 @@ import pathlib
 
 from importlib import import_module
 
+from exiftool import ExifToolHelper
+from rich import print
+
+from reloci.file_info import FileInfo
 from reloci.renamer import Renamer
 from reloci.worker import Worker
 
@@ -46,3 +50,23 @@ def cli():
     kwargs = vars(parser.parse_args())
 
     Worker(**kwargs).do_the_thing()
+
+
+def get_parser_info():
+    parser = argparse.ArgumentParser(
+        description='Show metadata available for a given file'
+    )
+
+    parser.add_argument('path', type=pathlib.Path)
+
+    return parser
+
+
+def info():
+    parser = get_parser_info()
+    kwargs = vars(parser.parse_args())
+
+    with ExifToolHelper() as exiftool:
+        file_info = FileInfo(exiftool=exiftool, **kwargs)
+        print(file_info.original_name)
+        print({attr: getattr(file_info, attr) for attr in file_info.__dir__() if not attr.startswith('_')})
