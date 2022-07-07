@@ -28,7 +28,7 @@ class DatePathRenamer(BaseRenamer):
 
     The resulting file path will be:
 
-        '%Y/%m/%y%m%d/{original_name}.{extension}'
+        '%Y/%m/%y%m%d/{original_name}'
 
     For example:
 
