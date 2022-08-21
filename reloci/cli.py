@@ -17,7 +17,7 @@ def get_renamer_class(import_path):
     return getattr(module, renamer_class)
 
 
-def get_parser():
+def get_parser_reloci():
     parser = argparse.ArgumentParser(
         description='Organise photos into directories based on file metadata'
     )
@@ -45,7 +45,7 @@ def get_parser():
     return parser
 
 
-def cli():
+def reloci():
     parser = get_parser()
     kwargs = vars(parser.parse_args())
 
