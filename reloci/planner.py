@@ -23,6 +23,7 @@ class Planner:
         self.renamer = renamer()
 
     def get_files(self):
+        """"Get list of all visible files (non symlinks) in input path"""
         return [
             path
             for path in self.input_root.rglob('*')
@@ -30,6 +31,13 @@ class Planner:
         ]
 
     def get_output_path(self, input_path, exiftool):
+        """"For a given file path determine the output path using the provided renamer
+
+        First try to get the best (most accurate) rename option for the input file.
+        If not available, try using information from counterpart files.
+        If that fails, use the fallback rename option for the input file.
+
+        """
         try:
             file_info = FileInfo(input_path, exiftool)
             return self.output_root / self.renamer.get_output_path(file_info)
@@ -41,6 +49,12 @@ class Planner:
                     return self.output_root / self.renamer.get_fallback_output_path(file_info)
 
     def get_output_path_from_counterpart(self, input_path, exiftool):
+        """Attempt to find an accurate rename option for a counterpart file
+
+        Find a file with the same base filename but with a different file extension.
+        Try to get an accurate rename option for this file.
+
+        """
         try:
             counterpart_path = next(
                 path
