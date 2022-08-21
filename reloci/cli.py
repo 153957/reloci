@@ -46,7 +46,7 @@ def get_parser_reloci():
 
 
 def reloci():
-    parser = get_parser()
+    parser = get_parser_reloci()
     kwargs = vars(parser.parse_args())
 
     Worker(**kwargs).do_the_thing()
