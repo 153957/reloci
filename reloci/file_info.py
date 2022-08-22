@@ -25,12 +25,12 @@ class FileInfo:
         self.tags = exiftool.get_tags(str(path), TAGS)[0]
 
     @property
-    def extension(self):
-        return self.file.suffix
-
-    @property
     def original_name(self):
         return self.file.name
+
+    @property
+    def extension(self):
+        return self.file.suffix
 
     @property
     def file_stat(self):
@@ -58,7 +58,7 @@ class FileInfo:
             if tag in self.tags:
                 return str(self.tags[tag])
 
-        return ''
+        raise LookupError(f'Did not find camera serial in EXIF of {self.file}')
 
     @property
     def shutter_count(self):
@@ -66,7 +66,7 @@ class FileInfo:
             if tag in self.tags:
                 return str(self.tags[tag])
 
-        return ''
+        raise LookupError(f'Did not find shutter count in EXIF of {self.file}')
 
     @property
     def subsecond_datetime(self):

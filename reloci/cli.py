@@ -68,5 +68,14 @@ def info():
 
     with ExifToolHelper() as exiftool:
         file_info = FileInfo(exiftool=exiftool, **kwargs)
-        print(file_info.original_name)
-        print({attr: getattr(file_info, attr) for attr in file_info.__dir__() if not attr.startswith('_')})
+
+        info = {}
+        for attr in file_info.__dir__():
+            if attr.startswith('_'):
+                continue
+            try:
+                info[attr] = getattr(file_info, attr)
+            except LookupError:
+                info[attr] = None
+
+        print(info)
