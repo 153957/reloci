@@ -1,5 +1,7 @@
 import pathlib
 
+from contextlib import suppress
+
 import baseconv
 
 
@@ -95,6 +97,31 @@ class Renamer(BaseRenamer):
         '2021/07/210723/APS_8297.MOV'
 
     """
+    def encode_timestamp(self, timestamp):
+        microsecond_timestamp = int(1000 * timestamp)
+        encoded_timestamp = baseconv.base36.encode(microsecond_timestamp)
+        return encoded_timestamp
+
+    def replace_prefix(self, name):
+        return (
+            name
+            # Serial numbers
+            .replace('2225260_', 'ADL_')
+            .replace('4019215_', 'WEN_')
+            .replace('4020135_', 'DSC_')
+            .replace('6037845_', 'APL_')
+            .replace('6795628_', 'ARN_')
+            .replace('6023198_', 'TED_')
+            .replace('6040831_', 'KIM_')
+            # Camera models
+            .replace('NIKON D500_', 'APS_')
+            .replace('NIKON D90_', 'ARM_')
+            .replace('iPhone 13 mini_', 'TRM_')
+            .replace('iPhone SE_', 'CLK_')
+            .replace('iPhone SE (1st generation)_', 'CLK_')
+            .replace('iPad Pro (10.5-inch)_', 'PAD_')
+        )
+
     def get_output_path(self, file_info):
         return self.get_filepath(file_info) / self.get_filename(file_info)
 
@@ -108,40 +135,23 @@ class Renamer(BaseRenamer):
 
     def get_filename(self, file_info):
         """Try to create a unique filename for each photo"""
-        if file_info.camera_model and file_info.shutter_count:
-            return (
+        with suppress(LookupError):
+            return self.replace_prefix(
                 f'{file_info.camera_serial}_{file_info.shutter_count:>06}{file_info.extension}'
-                .replace('2225260_', 'ADL_')
-                .replace('4019215_', 'WEN_')
-                .replace('4020135_', 'DSC_')
-                .replace('6037845_', 'APL_')
-                .replace('6795628_', 'ARN_')
-                .replace('6023198_', 'TED_')
-            )
-        elif file_info.camera_make == 'Apple':
-            timestamp = int(1000 * file_info.subsecond_datetime.timestamp())
-            encoded_timestamp = baseconv.base36.encode(timestamp)
-            return (
-                f'{file_info.camera_model}_{encoded_timestamp}{file_info.extension}'
-                .replace('iPhone 13 mini_', 'TRM_')
-                .replace('iPhone SE_', 'CLK_')
-                .replace('iPhone SE (1st generation)_', 'CLK_')
-                .replace('iPad Pro (10.5-inch)_', 'PAD_')
             )
 
-        return file_info.original_name
+        encoded_timestamp = self.encode_timestamp(file_info.subsecond_datetime.timestamp())
+        return self.replace_prefix(
+            f'{file_info.camera_model}_{encoded_timestamp}{file_info.extension}'
+        )
+
 
     def get_fallback_filename(self, file_info):
         """Try to create a unique filename for each photo"""
-        if file_info.camera_make == 'Apple':
-            timestamp = int(1000 * file_info.datetime.timestamp())
-            encoded_timestamp = baseconv.base36.encode(timestamp)
-            return (
+        with suppress(LookupError):
+            encoded_timestamp = self.encode_timestamp(file_info.datetime.timestamp())
+            return self.replace_prefix(
                 f'{file_info.camera_model}_{encoded_timestamp}{file_info.extension}'
-                .replace('iPhone 13 mini_', 'TRM_')
-                .replace('iPhone SE_', 'CLK_')
-                .replace('iPhone SE (1st generation)_', 'CLK_')
-                .replace('iPad Pro (10.5-inch)_', 'PAD_')
             )
 
         return file_info.original_name
