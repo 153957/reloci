@@ -114,6 +114,7 @@ class Renamer(BaseRenamer):
             .replace('6023198_', 'TED_')
             .replace('6040831_', 'KIM_')
             # Camera models
+            .replace('Canon PowerShot S60_', 'S60_')
             .replace('NIKON D500_', 'APS_')
             .replace('NIKON D90_', 'ARM_')
             .replace('iPhone 13 mini_', 'TRM_')
@@ -144,7 +145,6 @@ class Renamer(BaseRenamer):
         return self.replace_prefix(
             f'{file_info.camera_model}_{encoded_timestamp}{file_info.extension}'
         )
-
 
     def get_fallback_filename(self, file_info):
         """Try to create a unique filename for each photo"""
