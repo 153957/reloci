@@ -23,6 +23,11 @@ Currently the files will be ordered based on the creation date of the
 files. Use the `dryrun` option to check if the planned move/copy matches
 your expectations.
 
+Additionally there is a second command to view all relevant EXIF tags from a
+single file, and how they are interpreted by the FileInfo class.
+
+    $ reloci_info path/to/a/file.jpg
+
 
 ## Installation
 
@@ -33,7 +38,7 @@ If desired create a virtual environment then install this package from PyPI
 
 ## Setup for development
 
-Create a new virtual env with Python 3.9 and install the requirements:
+Create a new virtual env with Python 3.10 and install the requirements:
 
-    conda create -n reloci python=3.9 --yes
+    conda create -n reloci python=3.10 --yes
     pip install -e .[test]
