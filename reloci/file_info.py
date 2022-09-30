@@ -1,5 +1,3 @@
-import contextlib
-
 from datetime import datetime, timezone
 
 TAGS = [
@@ -7,9 +5,17 @@ TAGS = [
     'EXIF:DateTimeOriginal',
     'EXIF:Make',
     'EXIF:Model',
+    'EXIF:SerialNumber',
     'MakerNotes:DateTimeOriginal',
     'MakerNotes:SerialNumber',
     'MakerNotes:ShutterCount',
+    'MakerNotes:Make',
+    'MakerNotes:Model',
+    'QuickTime:CreationDate',
+    'QuickTime:Make',
+    'QuickTime:Model',
+    'XMP:ImageNumber',
+    'XMP:SerialNumber',
 ]
 
 
@@ -19,12 +25,12 @@ class FileInfo:
         self.tags = exiftool.get_tags(str(path), TAGS)[0]
 
     @property
-    def extension(self):
-        return self.file.suffix
-
-    @property
     def original_name(self):
         return self.file.name
+
+    @property
+    def extension(self):
+        return self.file.suffix
 
     @property
     def file_stat(self):
@@ -32,23 +38,39 @@ class FileInfo:
 
     @property
     def camera_make(self):
-        return str(self.tags.get('EXIF:Make', ''))
+        for tag in ('EXIF:Make', 'QuickTime:Make', 'MakerNotes:Make'):
+            if tag in self.tags:
+                return self.tags[tag]
+
+        raise LookupError(f'Did not find camera make in EXIF of {self.file}')
 
     @property
     def camera_model(self):
-        return str(self.tags.get('EXIF:Model', ''))
+        for tag in ('EXIF:Model', 'QuickTime:Model', 'MakerNotes:Model'):
+            if tag in self.tags:
+                return self.tags[tag]
+
+        raise LookupError(f'Did not find camera model in EXIF of {self.file}')
 
     @property
     def camera_serial(self):
-        return str(self.tags.get('MakerNotes:SerialNumber', ''))
+        for tag in ('MakerNotes:SerialNumber', 'EXIF:SerialNumber', 'XMP:SerialNumber'):
+            if tag in self.tags:
+                return str(self.tags[tag])
+
+        raise LookupError(f'Did not find camera serial in EXIF of {self.file}')
 
     @property
     def shutter_count(self):
-        return str(self.tags.get('MakerNotes:ShutterCount', ''))
+        for tag in ('MakerNotes:ShutterCount', 'XMP:ImageNumber'):
+            if tag in self.tags:
+                return str(self.tags[tag])
+
+        raise LookupError(f'Did not find shutter count in EXIF of {self.file}')
 
     @property
-    def exif_datetime(self):
-        """Extract original capture date from EXIF
+    def subsecond_datetime(self):
+        """Extract subsecond accurate original capture date from EXIF
 
         Try to get an accurate time by including the subsecond component.
         Raises LookupError if the date is not available in EXIF.
@@ -56,26 +78,37 @@ class FileInfo:
         Assume UTC timezone when not available from EXIF.
 
         """
-        with contextlib.suppress(KeyError):
-            date_time_original = self.tags['Composite:SubSecDateTimeOriginal']
+        tag = 'Composite:SubSecDateTimeOriginal'
+        if tag in self.tags:
+            date_time_original = self.tags[tag]
             try:
                 return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S.%f%z')
             except ValueError:
                 return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S.%f').replace(tzinfo=timezone.utc)
 
-        with contextlib.suppress(KeyError):
-            date_time_original = self.tags['MakerNotes:DateTimeOriginal']
-            try:
-                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S%z')
-            except ValueError:
-                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S').replace(tzinfo=timezone.utc)
+        raise LookupError(f'Did not find accurate date in EXIF of {self.file}')
 
-        with contextlib.suppress(KeyError):
-            date_time_original = self.tags['EXIF:DateTimeOriginal']
-            try:
-                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S%z')
-            except ValueError:
-                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S').replace(tzinfo=timezone.utc)
+    @property
+    def datetime(self):
+        """Extract second accurate original capture date from EXIF
+
+        Try to get the capture time accurate to second.
+        Raises LookupError if the date is not available in EXIF.
+
+        Assume UTC timezone when not available from EXIF.
+
+        """
+        for tag in (
+            'MakerNotes:DateTimeOriginal',
+            'EXIF:DateTimeOriginal',
+            'QuickTime:CreationDate',
+        ):
+            if tag in self.tags:
+                date_time_original = self.tags[tag]
+                try:
+                    return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S%z')
+                except ValueError:
+                    return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S').replace(tzinfo=timezone.utc)
 
         raise LookupError(f'Did not find original date in EXIF of {self.file}')
 

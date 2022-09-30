@@ -25,6 +25,7 @@ class PlannerTestCase(unittest.TestCase):
                 self.source / 'APS_003129.MOV',
                 self.source / 'DSC_064662.NEF',
                 self.source / 'IMG_6828.JPG',
+                self.source / 'IMG_7074.MOV',
                 self.source / 'IMG_9895.JPG',
                 self.source / 'IMG_9895.MOV',
                 self.source / 'IMG_054762.JPG',
@@ -35,14 +36,17 @@ class PlannerTestCase(unittest.TestCase):
 
     def test_get_output_path(self):
         combinations = [
+            # DSLR files
             ('APL_082158.NEF', '2021/04/210402/APL_082158.NEF'),
-            ('APS_003129.MOV', '2021/05/210501/APS_003129.MOV'),
+            ('APS_003129.MOV', '2021/05/210501/APS_ko5naps0.MOV'),
             ('DSC_064662.NEF', '2009/01/090106/DSC_064662.NEF'),
+            # Phone
             ('IMG_6828.JPG', '2019/04/190430/CLK_jv3vijqe.JPG'),
+            ('IMG_7074.MOV', '2022/05/220520/TRM_l3evriag.MOV'),  # No counterpart, uses less accurate timestamp
             ('IMG_9895.JPG', '2020/03/200320/CLK_k80cid1l.JPG'),
-            ('IMG_9895.MOV', '2020/03/200320/CLK_k80cid1l.MOV'),
-            ('IMG_054762.JPG', '2006/10/061025/IMG_054762.JPG'),
-            ('JYBF8578.DNG', '2020/10/201018/CLK_kgex8fen.DNG'),
+            ('IMG_9895.MOV', '2020/03/200320/CLK_k80cid1l.MOV'),  # Has counterpart for accurate timestamp
+            ('IMG_054762.JPG', '2006/10/061025/S60_etphfetc.JPG'),
+            ('JYBF8578.DNG', '2020/10/201018/CLK_kgex8fen.DNG'),  # RAW image
         ]
         with ExifToolHelper() as exiftool:
             for source_file, output_path in combinations:

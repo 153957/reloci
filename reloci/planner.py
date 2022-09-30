@@ -2,6 +2,7 @@ import collections
 import pathlib
 
 from dataclasses import dataclass
+from operator import attrgetter
 
 from exiftool import ExifToolHelper
 from tqdm import tqdm
@@ -22,6 +23,7 @@ class Planner:
         self.renamer = renamer()
 
     def get_files(self):
+        """Get list of all visible files (non symlinks) in input path"""
         return [
             path
             for path in self.input_root.rglob('*')
@@ -29,18 +31,35 @@ class Planner:
         ]
 
     def get_output_path(self, input_path, exiftool):
+        """For a given file path determine the output path using the provided renamer
+
+        First try to get the best (most accurate) rename option for the input file.
+        If not available, try using information from counterpart files.
+        If that fails, use the fallback rename option for the input file.
+
+        """
         try:
             file_info = FileInfo(input_path, exiftool)
             return self.output_root / self.renamer.get_output_path(file_info)
         except LookupError:
-            return self.get_output_path_from_counterpart(input_path, exiftool)
+            try:
+                return self.get_output_path_from_counterpart(input_path, exiftool)
+            except LookupError:
+                if hasattr(self.renamer, 'get_fallback_output_path'):
+                    return self.output_root / self.renamer.get_fallback_output_path(file_info)
 
     def get_output_path_from_counterpart(self, input_path, exiftool):
+        """Attempt to find an accurate rename option for a counterpart file
+
+        Find a file with the same base filename but with a different file extension.
+        Try to get an accurate rename option for this file.
+
+        """
         try:
             counterpart_path = next(
                 path
                 for path in input_path.parent.rglob(f'{input_path.stem}.*')
-                if path != input_path
+                if path != input_path and path.suffix.casefold() != '.aae'
             )
         except StopIteration:
             raise LookupError('Unable to find a counterpart file')
@@ -81,5 +100,5 @@ class Planner:
     def show_plan(self, plan):
         for directory, mappings in plan.items():
             print(f'{directory}')
-            for mapping in mappings:
+            for mapping in sorted(mappings, key=attrgetter('destination')):
                 print(f' {mapping.source}\t→\t{mapping.destination}')
