@@ -1,7 +1,7 @@
 # reloci
 
 [![PyPI](https://img.shields.io/pypi/v/reloci)](https://pypi.org/project/reloci/)
-[![License](https://img.shields.io/github/license/153957/reloci)](https://github.com/153957/reloci/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/153957/reloci)](https://github.com/153957/reloci/blob/main/LICENSE)
 [![Build](https://img.shields.io/github/actions/workflow/status/153957/reloci/tests.yml?branch=main)](https://github.com/153957/reloci/actions)
 
 This can be used to reorganise photos into directories by date.
