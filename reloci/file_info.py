@@ -1,4 +1,8 @@
 from datetime import datetime, timezone
+from os import stat_result
+from pathlib import Path
+
+from exiftool.helper import ExifToolHelper
 
 TAGS = [
     'Composite:SubSecDateTimeOriginal',
@@ -20,24 +24,24 @@ TAGS = [
 
 
 class FileInfo:
-    def __init__(self, path, exiftool):
+    def __init__(self, path: Path, exiftool: ExifToolHelper) -> None:
         self.file = path
-        self.tags = exiftool.get_tags(str(path), TAGS)[0]
+        self.tags: dict[str, str] = exiftool.get_tags(str(path), TAGS)[0]
 
     @property
-    def original_name(self):
+    def original_name(self) -> str:
         return self.file.name
 
     @property
-    def extension(self):
+    def extension(self) -> str:
         return self.file.suffix
 
     @property
-    def file_stat(self):
+    def file_stat(self) -> stat_result:
         return self.file.stat()
 
     @property
-    def camera_make(self):
+    def camera_make(self) -> str:
         for tag in ('EXIF:Make', 'QuickTime:Make', 'MakerNotes:Make'):
             if tag in self.tags:
                 return self.tags[tag]
@@ -45,7 +49,7 @@ class FileInfo:
         raise LookupError(f'Did not find camera make in EXIF of {self.file}')
 
     @property
-    def camera_model(self):
+    def camera_model(self) -> str:
         for tag in ('EXIF:Model', 'QuickTime:Model', 'MakerNotes:Model'):
             if tag in self.tags:
                 return self.tags[tag]
@@ -53,7 +57,7 @@ class FileInfo:
         raise LookupError(f'Did not find camera model in EXIF of {self.file}')
 
     @property
-    def camera_serial(self):
+    def camera_serial(self) -> str:
         for tag in ('MakerNotes:SerialNumber', 'EXIF:SerialNumber', 'XMP:SerialNumber'):
             if tag in self.tags:
                 return str(self.tags[tag])
@@ -61,7 +65,7 @@ class FileInfo:
         raise LookupError(f'Did not find camera serial in EXIF of {self.file}')
 
     @property
-    def shutter_count(self):
+    def shutter_count(self) -> str:
         for tag in ('MakerNotes:ShutterCount', 'XMP:ImageNumber'):
             if tag in self.tags:
                 return str(self.tags[tag])
@@ -69,7 +73,7 @@ class FileInfo:
         raise LookupError(f'Did not find shutter count in EXIF of {self.file}')
 
     @property
-    def subsecond_datetime(self):
+    def subsecond_datetime(self) -> datetime:
         """Extract subsecond accurate original capture date from EXIF
 
         Try to get an accurate time by including the subsecond component.
@@ -89,7 +93,7 @@ class FileInfo:
         raise LookupError(f'Did not find accurate date in EXIF of {self.file}')
 
     @property
-    def datetime(self):
+    def date_time(self) -> datetime:
         """Extract second accurate original capture date from EXIF
 
         Try to get the capture time accurate to second.
@@ -113,13 +117,15 @@ class FileInfo:
         raise LookupError(f'Did not find original date in EXIF of {self.file}')
 
     @property
-    def creation_datetime(self):
+    def creation_datetime(self) -> datetime:
         """Extract file creation date
 
         These times are not always accurate file created dates.
         Implementation also differ between operating systems.
 
         """
+        timestamp: float
+
         try:
             timestamp = self.file_stat.st_birthtime
         except AttributeError:

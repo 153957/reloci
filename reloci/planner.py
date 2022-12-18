@@ -1,28 +1,29 @@
 import collections
-import pathlib
 
 from dataclasses import dataclass
 from operator import attrgetter
+from pathlib import Path
 
 from exiftool import ExifToolHelper
 from tqdm import tqdm
 
 from reloci.file_info import FileInfo
+from reloci.renamer import BaseRenamer
 
 
 @dataclass
 class Map:
-    source: pathlib.Path
-    destination: pathlib.Path
+    source: Path
+    destination: Path
 
 
 class Planner:
-    def __init__(self, inputpath, outputpath, renamer):
+    def __init__(self, inputpath: Path, outputpath: Path, renamer: type[BaseRenamer]) -> None:
         self.input_root = inputpath
         self.output_root = outputpath
         self.renamer = renamer()
 
-    def get_files(self):
+    def get_files(self) -> list[Path]:
         """Get list of all visible files (non symlinks) in input path"""
         return [
             path
@@ -30,7 +31,7 @@ class Planner:
             if path.is_file() and not path.is_symlink() and not path.name.startswith('.')
         ]
 
-    def get_output_path(self, input_path, exiftool):
+    def get_output_path(self, input_path: Path, exiftool: ExifToolHelper) -> Path:
         """For a given file path determine the output path using the provided renamer
 
         First try to get the best (most accurate) rename option for the input file.
@@ -47,8 +48,9 @@ class Planner:
             except LookupError:
                 if hasattr(self.renamer, 'get_fallback_output_path'):
                     return self.output_root / self.renamer.get_fallback_output_path(file_info)
+                raise
 
-    def get_output_path_from_counterpart(self, input_path, exiftool):
+    def get_output_path_from_counterpart(self, input_path: Path, exiftool: ExifToolHelper) -> Path:
         """Attempt to find an accurate rename option for a counterpart file
 
         Find a file with the same base filename but with a different file extension.
@@ -68,7 +70,7 @@ class Planner:
         file_path = self.renamer.get_output_path(file_info)
         return self.output_root / file_path.parent / (file_path.stem + input_path.suffix)
 
-    def make_plan(self):
+    def make_plan(self) -> dict[Path, list[Map]]:
         """Create a mapping to know which input files go where in the output"""
         plan = collections.defaultdict(list)
 
@@ -97,7 +99,7 @@ class Planner:
 
         return plan
 
-    def show_plan(self, plan):
+    def show_plan(self, plan: dict[Path, list[Map]]) -> None:
         for directory, mappings in plan.items():
             print(f'{directory}')
             for mapping in sorted(mappings, key=attrgetter('destination')):

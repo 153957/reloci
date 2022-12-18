@@ -4,11 +4,15 @@ devinstall:
 	pip install --upgrade --upgrade-strategy eager --editable .[dev]
 
 .PHONY: test
-test: flaketest checksetup unittests
+test: flaketest typingtest checksetup unittests
 
 .PHONY: flaketest
 flaketest:
 	flake8
+
+.PHONY: typingtest
+typingtest:
+	mypy .
 
 .PHONY: checksetup
 checksetup:

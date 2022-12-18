@@ -1,68 +1,69 @@
 import argparse
-import pathlib
 
 from importlib import import_module
+from pathlib import Path
 
 from exiftool import ExifToolHelper
 from rich import print
 
 from reloci.file_info import FileInfo
-from reloci.renamer import Renamer
+from reloci.renamer import BaseRenamer, Renamer
 from reloci.worker import Worker
 
 
-def get_renamer_class(import_path):
-    renamer_module, _, renamer_class = import_path.rpartition('.')
+def get_renamer_class(import_path: str) -> type[BaseRenamer]:
+    renamer_module, _, renamer_class_name = import_path.rpartition('.')
     module = import_module(renamer_module)
-    return getattr(module, renamer_class)
+    renamer_class: type[BaseRenamer] = getattr(module, renamer_class_name)
+    return renamer_class
 
 
-def get_parser_reloci():
+def get_parser_reloci() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description='Organise photos into directories based on file metadata'
+        description='Organise photos into directories based on file metadata',
     )
 
     parser.add_argument(
         '--move',
         action='store_true',
-        help='move instead of copy files to the new locations, removing them from the source location'
+        help='move instead of copy files to the new locations, removing them from the source location',
     )
     parser.add_argument(
         '--dryrun',
         action='store_true',
-        help='do not move or copy any files, just show the actions it would take'
+        help='do not move or copy any files, just show the actions it would take',
     )
     parser.add_argument(
         '--renamer',
         type=get_renamer_class,
         default=Renamer,
-        help='provide your own BaseRenamer subclass for custom output paths'
+        help='provide your own BaseRenamer subclass for custom output paths',
     )
 
-    parser.add_argument('inputpath', type=pathlib.Path)
-    parser.add_argument('outputpath', type=pathlib.Path)
+    parser.add_argument('inputpath', type=Path)
+    parser.add_argument('outputpath', type=Path)
 
     return parser
 
 
-def reloci():
+def reloci() -> None:
     parser = get_parser_reloci()
     kwargs = vars(parser.parse_args())
 
     Worker(**kwargs).do_the_thing()
 
 
-def get_parser_info():
+def get_parser_info() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description='Show metadata available for a given file'
     )
 
-    parser.add_argument('path', type=pathlib.Path)
+    parser.add_argument('path', type=Path)
 
     return parser
 
 
-def info():
+def info() -> None:
     parser = get_parser_info()
     kwargs = vars(parser.parse_args())
 

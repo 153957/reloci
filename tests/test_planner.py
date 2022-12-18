@@ -8,17 +8,17 @@ from reloci import planner, renamer
 
 
 class PlannerTestCase(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.source = Path(__file__).parent.parent / 'demo/source/'
         self.output = self.source.parent / 'output/'
         self.planner = planner.Planner(self.source, self.output, renamer.Renamer)
 
-    def test_init(self):
+    def test_init(self) -> None:
         self.assertEqual(self.source, self.planner.input_root)
         self.assertEqual(self.output, self.planner.output_root)
         self.assertIsInstance(self.planner.renamer, renamer.Renamer)
 
-    def test_get_files(self):
+    def test_get_files(self) -> None:
         self.assertCountEqual(
             [
                 self.source / 'APL_082158.NEF',
@@ -34,7 +34,7 @@ class PlannerTestCase(unittest.TestCase):
             self.planner.get_files()
         )
 
-    def test_get_output_path(self):
+    def test_get_output_path(self) -> None:
         combinations = [
             # DSLR files
             ('APL_082158.NEF', '2021/04/210402/APL_082158.NEF'),
