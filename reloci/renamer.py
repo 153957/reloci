@@ -142,7 +142,7 @@ class Renamer(BaseRenamer):
         with suppress(LookupError):
             return self.get_filepath(file_info)
 
-        return pathlib.Path('0000/00/000000')
+        return Path('0000/00/000000')
 
     def get_filename(self, file_info: FileInfo) -> str:
         """Try to create a unique filename for each photo"""
