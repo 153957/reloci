@@ -112,16 +112,18 @@ class Renamer(BaseRenamer):
             .replace('4020135_', 'DSC_')
             .replace('6037845_', 'APL_')
             .replace('6795628_', 'ARN_')
-            .replace('6023198_', 'TED_')
-            .replace('6040831_', 'KIM_')
             # Camera models
             .replace('Canon PowerShot S60_', 'S60_')
             .replace('NIKON D500_', 'APS_')
             .replace('NIKON D90_', 'ARM_')
+            .replace('iPhone 5_', 'CBG_')
             .replace('iPhone 13 mini_', 'TRM_')
             .replace('iPhone SE_', 'CLK_')
             .replace('iPhone SE (1st generation)_', 'CLK_')
             .replace('iPad Pro (10.5-inch)_', 'PAD_')
+            # Other
+            .replace('6023198_', 'TED_')
+            .replace('6040831_', 'KIM_')
         )
 
     def get_output_path(self, file_info: FileInfo) -> Path:
