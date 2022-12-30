@@ -130,12 +130,19 @@ class Renamer(BaseRenamer):
         return self.get_filepath(file_info) / self.get_filename(file_info)
 
     def get_fallback_output_path(self, file_info: FileInfo) -> Path:
-        return self.get_filepath(file_info) / self.get_fallback_filename(file_info)
+        return self.get_fallback_filepath(file_info) / self.get_fallback_filename(file_info)
 
     def get_filepath(self, file_info: FileInfo) -> Path:
-        """Create a file path based on the capture date (with fallback for creation date)"""
+        """Create a file path based on the capture date (with fallback for EXIF creation date)"""
         file_path = file_info.date_time.strftime('%Y/%m/%y%m%d')
         return Path(file_path)
+
+    def get_fallback_filepath(self, file_info: FileInfo) -> Path:
+        """Try the accurate filepath, if that fails fallback to zeroes"""
+        with suppress(LookupError):
+            return self.get_filepath(file_info)
+
+        return pathlib.Path('0000/00/000000')
 
     def get_filename(self, file_info: FileInfo) -> str:
         """Try to create a unique filename for each photo"""
@@ -151,6 +158,9 @@ class Renamer(BaseRenamer):
 
     def get_fallback_filename(self, file_info: FileInfo) -> str:
         """Try to create a unique filename for each photo"""
+        with suppress(LookupError):
+            return self.get_filename(file_info)
+
         with suppress(LookupError):
             encoded_timestamp = self.encode_timestamp(file_info.date_time.timestamp())
             return self.replace_prefix(
