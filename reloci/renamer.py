@@ -146,14 +146,16 @@ class Renamer(BaseRenamer):
 
     def get_filename(self, file_info: FileInfo) -> str:
         """Try to create a unique filename for each photo"""
+        suffix = self.get_suffix(file_info)
+
         with suppress(LookupError):
             return self.replace_prefix(
-                f'{file_info.camera_serial}_{file_info.shutter_count:>06}{file_info.extension}'
+                f'{file_info.camera_serial}_{file_info.shutter_count:>06}{suffix}{file_info.extension}'
             )
 
         encoded_timestamp = self.encode_timestamp(file_info.subsecond_datetime.timestamp())
         return self.replace_prefix(
-            f'{file_info.camera_model}_{encoded_timestamp}{file_info.extension}'
+            f'{file_info.camera_model}_{encoded_timestamp}{suffix}{file_info.extension}'
         )
 
     def get_fallback_filename(self, file_info: FileInfo) -> str:
@@ -161,10 +163,23 @@ class Renamer(BaseRenamer):
         with suppress(LookupError):
             return self.get_filename(file_info)
 
+        suffix = self.get_suffix(file_info)
+
         with suppress(LookupError):
             encoded_timestamp = self.encode_timestamp(file_info.date_time.timestamp())
             return self.replace_prefix(
-                f'{file_info.camera_model}_{encoded_timestamp}{file_info.extension}'
+                f'{file_info.camera_model}_{encoded_timestamp}{suffix}{file_info.extension}'
             )
 
         return file_info.original_name
+
+    def get_suffix(self, file_info: FileInfo) -> str:
+        """Determine if an additional suffix should be added to the name"""
+        if 'IMG_E' in file_info.original_name:
+            # Image was edited on iOS
+            return '_edited'
+        elif '_edited' in file_info.original_name:
+            # Image was previously suffixed, keep the suffix
+            return '_edited'
+
+        return ''
