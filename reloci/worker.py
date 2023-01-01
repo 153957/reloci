@@ -16,6 +16,7 @@ class Worker:
         outputpath: Path,
         move: bool,
         dryrun: bool,
+        verbose: bool,
         renamer: type[BaseRenamer],
     ) -> None:
         self.inputpath = inputpath
@@ -24,6 +25,7 @@ class Worker:
 
         self.move = move
         self.dryrun = dryrun
+        self.verbose = verbose
 
     def do_the_thing(self) -> None:
         planner = Planner(
@@ -33,8 +35,10 @@ class Worker:
         )
         plan = planner.make_plan()
 
-        if self.dryrun:
+        if self.verbose:
             planner.show_plan(plan)
+
+        if self.dryrun:
             return
 
         self.make_directories(plan.keys())

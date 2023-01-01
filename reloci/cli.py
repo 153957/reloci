@@ -31,7 +31,12 @@ def get_parser_reloci() -> argparse.ArgumentParser:
     parser.add_argument(
         '--dryrun',
         action='store_true',
-        help='do not move or copy any files, just show the actions it would take',
+        help='do not move or copy any files, only determine the actions to take',
+    )
+    parser.add_argument(
+        '--verbose',
+        action='store_true',
+        help='show the actions to be taken',
     )
     parser.add_argument(
         '--renamer',
