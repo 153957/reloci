@@ -124,10 +124,5 @@ class FileInfo:
         Implementation also differ between operating systems.
 
         """
-        timestamp: float
-
-        try:
-            timestamp = self.file_stat.st_birthtime
-        except AttributeError:
-            timestamp = self.file_stat.st_ctime
+        timestamp: float = getattr(self.file_stat, 'st_birthtime', self.file_stat.st_ctime)
         return datetime.fromtimestamp(timestamp)
