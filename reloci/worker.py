@@ -16,7 +16,7 @@ class Worker:
         outputpath: Path,
         move: bool,
         dryrun: bool,
-        verbose: bool,
+        verbose: int,
         renamer: type[BaseRenamer],
     ) -> None:
         self.inputpath = inputpath
@@ -35,7 +35,9 @@ class Worker:
         )
         plan = planner.make_plan()
 
-        if self.verbose:
+        if self.verbose == 1:
+            planner.show_summary(plan)
+        elif self.verbose > 1:
             planner.show_plan(plan)
 
         if self.dryrun:

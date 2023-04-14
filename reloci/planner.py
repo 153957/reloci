@@ -99,6 +99,10 @@ class Planner:
 
         return plan
 
+    def show_summary(self, plan: dict[Path, list[Map]]) -> None:
+        for directory, mappings in plan.items():
+            print(f'{len(mappings): 5d} → {directory}')
+
     def show_plan(self, plan: dict[Path, list[Map]]) -> None:
         for directory, mappings in plan.items():
             print(f'{directory}')

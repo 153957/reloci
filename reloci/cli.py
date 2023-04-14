@@ -35,7 +35,9 @@ def get_parser_reloci() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         '--verbose',
-        action='store_true',
+        '-v',
+        action='count',
+        default=0,
         help='show the actions to be taken',
     )
     parser.add_argument(
