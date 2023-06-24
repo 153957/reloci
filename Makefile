@@ -1,22 +1,23 @@
+.PHONY: ruffinstall
+ruffinstall:
+	pip install --upgrade pip
+	pip install --upgrade --upgrade-strategy eager -r requirements-ruff.txt
+
 .PHONY: devinstall
 devinstall:
 	pip install --upgrade pip
 	pip install --upgrade --upgrade-strategy eager --editable .[dev]
 
 .PHONY: test
-test: flaketest typingtest checksetup unittests
+test: rufftest typingtest unittests
 
-.PHONY: flaketest
-flaketest:
-	flake8
+.PHONY: rufftest
+rufftest:
+	ruff .
 
 .PHONY: typingtest
 typingtest:
 	mypy .
-
-.PHONY: checksetup
-checksetup:
-	python setup.py check -ms
 
 .PHONY: unittests
 unittests:
