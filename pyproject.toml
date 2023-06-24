@@ -1,0 +1,101 @@
+[build-system]
+requires = ['flit_core>=3.9']
+build-backend = 'flit_core.buildapi'
+
+[project]
+name = 'reloci'
+version = '5.0'
+description = 'Organize photos based on exif'
+readme = 'README.md'
+requires-python = '>=3.11'
+license = {file = 'LICENSE'}
+authors = [
+    {name = 'Arne de Laat', email = 'arne@delaat.net'},
+]
+maintainers = [
+    {name = 'Arne de Laat', email = 'arne@delaat.net'},
+]
+keywords = [
+    'photos',
+    'exif',
+    'date',
+    'directories',
+    'organize',
+]
+classifiers = [
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Topic :: Desktop Environment :: File Managers',
+]
+dependencies = [
+    'pyexiftool',
+    'python-baseconv',
+    'rich',
+    'tqdm',
+]
+
+[project.optional-dependencies]
+dev = [
+    'coverage',
+    'flake8',
+    'flake8-isort',
+    'mypy',
+]
+
+[project.urls]
+Repository = 'https://github.com/153957/reloci/'
+
+[project.scripts]
+reloci = 'reloci.cli:reloci'
+reloci_info = 'reloci.cli:info'
+
+[tool.mypy]
+ignore_missing_imports = true
+show_column_numbers = true
+show_error_codes = true
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.black]
+target-version = ['py311']
+line-length = 120
+skip-string-normalization = true
+
+[tool.ruff]
+target-version = 'py311'
+line-length = 120
+select = [
+    # https://github.com/charliermarsh/ruff#supported-rules
+    'ALL',
+    'E111', 'E112', 'E113', 'E114', 'E115', 'E116', 'E117',
+    'E201', 'E202', 'E203',
+    'E211',
+    'E221', 'E222', 'E223', 'E224', 'E225', 'E226', 'E227', 'E228',
+    'E231',
+    'E251', 'E252',
+    'E261', 'E262', 'E265', 'E266',
+    'E271', 'E272', 'E273', 'E274', 'E275',
+]
+ignore = [
+    'D',  # Ignore docstring checks
+    'FBT001',  # Allow positional for boolean arguments
+    'FBT002',  # Allow default value for boolean arguments
+    'PD',  # Not using pandas
+    'PLR0913',  # Allow functions with many arguments
+    'Q000',  # Use single quotes
+    'RET504',  # Allow variable assignment before return
+    'SIM108',  # Allow if-else block instead of ternary
+    'T201',  # Allow using print
+]
+
+[tool.ruff.isort]
+lines-between-types = 1
+
+[tool.coverage.run]
+branch = true
+source = [
+    'reloci',
+    'tests',
+]
