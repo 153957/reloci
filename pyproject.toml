@@ -29,19 +29,20 @@ classifiers = [
     'Topic :: Desktop Environment :: File Managers',
 ]
 dependencies = [
-    'pyexiftool',
-    'python-baseconv',
-    'rich',
-    'tqdm',
+    'pyexiftool==0.5.5',
+    'python-baseconv==1.2.2',
+    'rich==13.4.2',
+    'tqdm==4.65.0',
 ]
 
 [project.optional-dependencies]
 dev = [
-    'black',
-    'coverage',
-    'flake8',
-    'flake8-isort',
-    'mypy',
+    'black==23.3.0',
+    'coverage==7.2.7',
+    'mypy==1.4.0',
+]
+publish = [
+    'flit==3.9.0',
 ]
 
 [project.urls]
