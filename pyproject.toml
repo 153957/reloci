@@ -37,6 +37,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+    'black',
     'coverage',
     'flake8',
     'flake8-isort',
@@ -79,15 +80,19 @@ select = [
     'E271', 'E272', 'E273', 'E274', 'E275',
 ]
 ignore = [
+    'ANN101',  # No need to add type to self
     'D',  # Ignore docstring checks
+    'EM',  # Allow messages directly in exceptions
     'FBT001',  # Allow positional for boolean arguments
     'FBT002',  # Allow default value for boolean arguments
     'PD',  # Not using pandas
     'PLR0913',  # Allow functions with many arguments
+    'PT',  # Not using pytest
     'Q000',  # Use single quotes
     'RET504',  # Allow variable assignment before return
     'SIM108',  # Allow if-else block instead of ternary
     'T201',  # Allow using print
+    'TRY003',  # Specific messages for common exception classes
 ]
 
 [tool.ruff.isort]
