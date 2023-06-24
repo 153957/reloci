@@ -25,16 +25,11 @@ unittests:
 
 .PHONY: clean
 clean:
-	rm -rf build dist
+	rm -rf dist
 
-.PHONY: build
-build: clean
-	python -m build --sdist --wheel
-	twine check dist/*
-
-.PHONY: release
-release: build
-	twine upload dist/*
+.PHONY: publish
+publish:
+	flit publish
 
 .PHONY: demo
 demo:
