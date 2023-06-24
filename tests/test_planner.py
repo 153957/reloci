@@ -24,6 +24,7 @@ class PlannerTestCase(unittest.TestCase):
                 self.source / 'APL_082158.NEF',
                 self.source / 'APS_003129.MOV',
                 self.source / 'DSC_064662.NEF',
+                self.source / 'IMG_1711.HEIC',
                 self.source / 'IMG_6828.JPG',
                 self.source / 'IMG_7074.MOV',
                 self.source / 'IMG_9895.JPG',
@@ -41,6 +42,7 @@ class PlannerTestCase(unittest.TestCase):
             ('APS_003129.MOV', '2021/05/210501/APS_ko5naps0.MOV'),
             ('DSC_064662.NEF', '2009/01/090106/DSC_064662.NEF'),
             # Phone
+            ('IMG_1711.HEIC', '2023/06/230618/TRM_lj19p554.HEIC'),
             ('IMG_6828.JPG', '2019/04/190430/CLK_jv3vijqe.JPG'),
             ('IMG_7074.MOV', '2022/05/220520/TRM_l3evriag.MOV'),  # No counterpart, uses less accurate timestamp
             ('IMG_9895.JPG', '2020/03/200320/CLK_k80cid1l.JPG'),
