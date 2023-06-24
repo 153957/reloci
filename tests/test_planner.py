@@ -32,7 +32,7 @@ class PlannerTestCase(unittest.TestCase):
                 self.source / 'IMG_054762.JPG',
                 self.source / 'JYBF8578.DNG',
             ],
-            self.planner.get_files()
+            self.planner.get_files(),
         )
 
     def test_get_output_path(self) -> None:

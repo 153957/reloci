@@ -54,11 +54,7 @@ class Worker:
             directory.mkdir(parents=True, exist_ok=True)
 
     def flatten_plan(self, plan: dict[Path, list[Map]]) -> list[Map]:
-        return [
-            mapping
-            for mappings in plan.values()
-            for mapping in mappings
-        ]
+        return [mapping for mappings in plan.values() for mapping in mappings]
 
     def move_files(self, plan: dict[Path, list[Map]]) -> None:
         for mapping in tqdm(self.flatten_plan(plan), desc='Moving files', dynamic_ncols=True):

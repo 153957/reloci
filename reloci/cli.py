@@ -61,9 +61,7 @@ def reloci() -> None:
 
 
 def get_parser_info() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        description='Show metadata available for a given file'
-    )
+    parser = argparse.ArgumentParser(description='Show metadata available for a given file')
 
     parser.add_argument('path', type=Path)
 

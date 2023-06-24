@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from os import stat_result
 from pathlib import Path
 
@@ -88,7 +88,7 @@ class FileInfo:
             try:
                 return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S.%f%z')
             except ValueError:
-                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S.%f').replace(tzinfo=timezone.utc)
+                return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S.%f').replace(tzinfo=UTC)
 
         raise LookupError(f'Did not find accurate date in EXIF of {self.file}')
 
@@ -112,7 +112,7 @@ class FileInfo:
                 try:
                     return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S%z')
                 except ValueError:
-                    return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S').replace(tzinfo=timezone.utc)
+                    return datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S').replace(tzinfo=UTC)
 
         raise LookupError(f'Did not find original date in EXIF of {self.file}')
 
@@ -125,4 +125,4 @@ class FileInfo:
 
         """
         timestamp: float = getattr(self.file_stat, 'st_birthtime', self.file_stat.st_ctime)
-        return datetime.fromtimestamp(timestamp)
+        return datetime.fromtimestamp(timestamp, tz=UTC)

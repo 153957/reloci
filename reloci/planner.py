@@ -64,7 +64,7 @@ class Planner:
                 if path != input_path and path.suffix.casefold() != '.aae'
             )
         except StopIteration:
-            raise LookupError('Unable to find a counterpart file')
+            raise LookupError('Unable to find a counterpart file') from None
 
         file_info = FileInfo(counterpart_path, exiftool)
         file_path = self.renamer.get_output_path(file_info)
@@ -83,10 +83,12 @@ class Planner:
                 output_path = self.get_output_path(input_path, exiftool)
 
                 if output_path in destinations:
-                    raise Exception(f'Multiple files have the same destination!\n {input_path}\t→\t{output_path}.')
+                    raise OSError(f'Multiple files have the same destination!\n {input_path}\t→\t{output_path}.')
 
                 if output_path.is_file():
-                    raise Exception(f'A file already exists at destination path!\n {input_path}\t→\t{output_path}.')
+                    raise FileExistsError(
+                        f'A file already exists at destination path!\n {input_path}\t→\t{output_path}.',
+                    )
 
                 destinations.add(output_path)
 
@@ -94,7 +96,7 @@ class Planner:
                     Map(
                         source=input_path,
                         destination=output_path,
-                    )
+                    ),
                 )
 
         return plan
