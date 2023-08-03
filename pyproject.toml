@@ -31,7 +31,7 @@ classifiers = [
 dependencies = [
     'pyexiftool==0.5.5',
     'python-baseconv==1.2.2',
-    'rich==13.4.2',
+    'rich==13.5.2',
     'tqdm==4.65.0',
 ]
 
