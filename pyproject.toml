@@ -68,11 +68,8 @@ skip-string-normalization = true
 [tool.ruff]
 target-version = 'py311'
 line-length = 120
-select = [
-    # https://github.com/charliermarsh/ruff#supported-rules
-    'ALL',
-    'NURSERY',
-]
+preview = true
+select = ['ALL']  # https://docs.astral.sh/ruff/rules/
 ignore = [
     'ANN101',  # No need to add type to self
     'CPY001',  # Do not require copyright notices
@@ -82,6 +79,7 @@ ignore = [
     'FBT002',  # Allow default value for boolean arguments
     'PD',  # Not using pandas
     'PLR0913',  # Allow functions with many arguments
+    'PLR6301',  # Allow not using self in methods
     'PT',  # Not using pytest
     'Q000',  # Use single quotes
     'RET504',  # Allow variable assignment before return
