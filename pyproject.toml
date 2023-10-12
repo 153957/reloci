@@ -39,7 +39,7 @@ dependencies = [
 dev = [
     'black==23.9.1',
     'coverage==7.3.1',
-    'mypy==1.5.1',
+    'mypy==1.6.0',
 ]
 publish = [
     'flit==3.9.0',
