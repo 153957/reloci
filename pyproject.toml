@@ -37,7 +37,6 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    'black==23.9.1',
     'coverage==7.3.2',
     'mypy==1.7.0',
 ]
@@ -60,15 +59,14 @@ strict = true
 warn_return_any = true
 warn_unused_configs = true
 
-[tool.black]
-target-version = ['py311']
-line-length = 120
-skip-string-normalization = true
-
 [tool.ruff]
-target-version = 'py311'
 line-length = 120
-preview = true
+target-version = 'py311'
+
+[tool.ruff.format]
+quote-style = 'single'  # Prefer single quotes, except for triple quotes strings
+
+[tool.ruff.lint]
 select = ['ALL']  # https://docs.astral.sh/ruff/rules/
 ignore = [
     'ANN101',  # No need to add type to self
@@ -81,14 +79,16 @@ ignore = [
     'PLR0913',  # Allow functions with many arguments
     'PLR6301',  # Allow not using self in methods
     'PT',  # Not using pytest
-    'Q000',  # Use single quotes
     'RET504',  # Allow variable assignment before return
     'SIM108',  # Allow if-else block instead of ternary
     'T201',  # Allow using print
     'TRY003',  # Specific messages for common exception classes
 ]
 
-[tool.ruff.isort]
+[tool.ruff.lint.flake8-quotes]
+inline-quotes = 'single'
+
+[tool.ruff.lint.isort]
 lines-between-types = 1
 
 [tool.coverage.run]
