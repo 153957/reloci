@@ -38,7 +38,7 @@ If desired create a virtual environment then install this package from PyPI
 
 ## Setup for development
 
-Create a new virtual env with Python 3.11 and install the requirements:
+Create a new virtual env with Python 3.13 and install the requirements:
 
-    conda create -n reloci python=3.11 --yes
+    conda create -n reloci python=3.13 --yes
     pip install -e .[test]

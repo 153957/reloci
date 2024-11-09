@@ -7,7 +7,7 @@ name = 'reloci'
 version = '5.0'
 description = 'Organize photos based on exif'
 readme = 'README.md'
-requires-python = '>=3.11'
+requires-python = '>=3.13'
 license = {file = 'LICENSE'}
 authors = [
     {name = 'Arne de Laat', email = 'arne@delaat.net'},
