@@ -2,6 +2,7 @@ from datetime import UTC, datetime
 from os import stat_result
 from pathlib import Path
 
+from exiftool.exceptions import ExifToolException
 from exiftool.helper import ExifToolHelper
 
 TAGS = [
@@ -26,7 +27,10 @@ TAGS = [
 class FileInfo:
     def __init__(self, path: Path, exiftool: ExifToolHelper) -> None:
         self.file = path
-        self.tags: dict[str, str] = exiftool.get_tags(str(path), TAGS)[0]
+        try:
+            self.tags: dict[str, str] = exiftool.get_tags(str(path), TAGS)[0]
+        except ExifToolException as error:
+            raise RuntimeError(f'An error occured while processing {path}') from error
 
     @property
     def original_name(self) -> str:
