@@ -126,6 +126,7 @@ class Renamer(BaseRenamer):
             # Other
             .replace('6023198_', 'TED_')
             .replace('6040831_', 'KIM_')
+            .replace('6012891_', 'MIK_')
         )
 
     def get_output_path(self, file_info: FileInfo) -> Path:
