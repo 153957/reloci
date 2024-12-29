@@ -60,7 +60,7 @@ def reloci() -> None:
     Worker(**kwargs).do_the_thing()
 
 
-def get_parser_info() -> argparse.ArgumentParser:
+def get_parser_file_info() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description='Show metadata available for a given file')
 
     parser.add_argument('path', type=Path)
@@ -68,8 +68,8 @@ def get_parser_info() -> argparse.ArgumentParser:
     return parser
 
 
-def info() -> None:
-    parser = get_parser_info()
+def file_info() -> None:
+    parser = get_parser_file_info()
     kwargs = vars(parser.parse_args())
 
     with ExifToolHelper() as exiftool:

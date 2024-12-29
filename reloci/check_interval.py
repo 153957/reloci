@@ -105,7 +105,3 @@ def main() -> None:
         args.shots_per_interval,
         args.group,
     )
-
-
-if __name__ == '__main__':
-    main()

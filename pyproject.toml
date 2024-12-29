@@ -49,7 +49,7 @@ Repository = 'https://github.com/153957/reloci/'
 
 [project.scripts]
 reloci = 'reloci.cli:reloci'
-reloci_info = 'reloci.cli:info'
+file_info = 'reloci.cli:file_info'
 check_interval = 'reloci.check_interval:main'
 
 [tool.mypy]
