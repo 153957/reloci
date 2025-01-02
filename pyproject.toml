@@ -37,7 +37,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    'coverage==7.6.4',
+    'coverage==7.6.10',
     'mypy==1.13.0',
 ]
 publish = [
