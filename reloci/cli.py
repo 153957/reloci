@@ -3,8 +3,9 @@ import argparse
 from importlib import import_module
 from pathlib import Path
 
+import rich
+
 from exiftool import ExifToolHelper
-from rich import print
 
 from reloci.file_info import FileInfo
 from reloci.renamer import BaseRenamer, Renamer
@@ -84,4 +85,4 @@ def file_info() -> None:
             except LookupError:
                 info[attr] = None
 
-        print(info)
+        rich.print(info)
