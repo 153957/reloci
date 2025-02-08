@@ -13,20 +13,27 @@ This is a command line utility to copy or move files from one location
 to another location using the metadata in the files to order them
 into logical directories.
 
-    $ reloci current/path/to/files path/to/destination
+    reloci current/path/to/files path/to/destination
 
 To see all options use
 
-    $ reloci --help
+    reloci --help
 
 Currently the files will be ordered based on the creation date of the
 files. Use the `dryrun` option to check if the planned move/copy matches
 your expectations.
 
-Additionally there is a second command to view all relevant EXIF tags from a
+Specifically for time-lapse shooting there is a command to group photos
+from the same sequence, based on a consistent interval between subsequent
+photos. Use the `group` option to immediately group the found sequences in
+directories.
+
+    check_interval --pattern "APL_*.NEF" --group
+
+Additionally, there is a command to view all relevant EXIF tags from a
 single file, and how they are interpreted by the FileInfo class.
 
-    $ reloci_info path/to/a/file.jpg
+    reloci_info path/to/a/file.jpg
 
 
 ## Installation
@@ -40,5 +47,4 @@ If desired create a virtual environment then install this package from PyPI
 
 Create a new virtual env with Python 3.13 and install the requirements:
 
-    conda create -n reloci python=3.13 --yes
     pip install -e .[test]
