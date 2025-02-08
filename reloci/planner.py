@@ -5,7 +5,7 @@ from operator import attrgetter
 from pathlib import Path
 
 from exiftool import ExifToolHelper
-from tqdm import tqdm
+from rich.progress import track
 
 from reloci.file_info import FileInfo
 from reloci.renamer import BaseRenamer
@@ -79,7 +79,7 @@ class Planner:
         input_paths = self.get_files()
 
         with ExifToolHelper() as exiftool:
-            for input_path in tqdm(input_paths, desc='Reading input', dynamic_ncols=True):
+            for input_path in track(input_paths, description='Reading input'):
                 output_path = self.get_output_path(input_path, exiftool)
 
                 if output_path in destinations:

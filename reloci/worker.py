@@ -3,7 +3,7 @@ import shutil
 from collections.abc import KeysView
 from pathlib import Path
 
-from tqdm import tqdm
+from rich.progress import track
 
 from reloci.planner import Map, Planner
 from reloci.renamer import BaseRenamer
@@ -57,9 +57,9 @@ class Worker:
         return [mapping for mappings in plan.values() for mapping in mappings]
 
     def move_files(self, plan: dict[Path, list[Map]]) -> None:
-        for mapping in tqdm(self.flatten_plan(plan), desc='Moving files', dynamic_ncols=True):
+        for mapping in track(self.flatten_plan(plan), description='Moving files'):
             shutil.move(mapping.source, mapping.destination)
 
     def copy_files(self, plan: dict[Path, list[Map]]) -> None:
-        for mapping in tqdm(self.flatten_plan(plan), desc='Copying files', dynamic_ncols=True):
+        for mapping in track(self.flatten_plan(plan), description='Copying files'):
             shutil.copy2(mapping.source, mapping.destination)
