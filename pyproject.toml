@@ -40,7 +40,7 @@ dev = [
     'mypy==1.14.1',
 ]
 publish = [
-    'flit==3.10.1',
+    'flit==3.11.0',
 ]
 
 [project.urls]
