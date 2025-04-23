@@ -5,6 +5,7 @@ import pathlib
 from operator import attrgetter
 
 from exiftool import ExifToolHelper
+from rich.progress import track
 
 from reloci.file_info import FileInfo
 
@@ -17,13 +18,13 @@ def find_sequences(pattern: str, shots_per_interval: int, group: bool) -> None:
     skip = shots_per_interval
     files = sorted(pathlib.Path().glob(pattern))
 
-    if not files:
+    if len(files) <= MIN_IMAGES_SEQUENCE:
         print(f'Found no files matching the pattern "{pattern}"')
         return
 
     with ExifToolHelper() as exiftool:
         image_dates = sorted(
-            (FileInfo(path, exiftool) for path in files[::skip]),
+            (FileInfo(path, exiftool) for path in track(files[::skip], description='Reading dates')),
             key=attrgetter('subsecond_datetime'),
         )
 
