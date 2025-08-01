@@ -31,13 +31,13 @@ classifiers = [
 dependencies = [
     'pyexiftool==0.5.6',
     'python-baseconv==1.2.2',
-    'rich==14.0.0',
+    'rich==14.1.0',
 ]
 
 [project.optional-dependencies]
 dev = [
-    'coverage==7.9.2',
-    'mypy==1.17.0',
+    'coverage==7.10.1',
+    'mypy==1.17.1',
 ]
 publish = [
     'flit==3.12.0',
