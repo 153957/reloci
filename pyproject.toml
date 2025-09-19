@@ -37,7 +37,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     'coverage==7.10.6',
-    'mypy==1.18.1',
+    'mypy==1.18.2',
 ]
 publish = [
     'flit==3.12.0',
