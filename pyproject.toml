@@ -1,6 +1,6 @@
 [build-system]
-requires = ['flit_core>=3.9']
-build-backend = 'flit_core.buildapi'
+requires = ["uv_build>=0.8.4"]
+build-backend = "uv_build"
 
 [project]
 name = 'reloci'
@@ -8,7 +8,8 @@ version = '6.0'
 description = 'Organize photos based on exif'
 readme = 'README.md'
 requires-python = '>=3.13'
-license = {file = 'LICENSE'}
+license = 'MIT'
+license-files = ['LICENSE']
 authors = [
     {name = 'Arne de Laat', email = 'arne@delaat.net'},
 ]
@@ -39,9 +40,6 @@ dev = [
     'coverage==7.10.7',
     'ty==0.0.1a22',
 ]
-publish = [
-    'flit==3.12.0',
-]
 
 [project.urls]
 Repository = 'https://github.com/153957/reloci/'
@@ -50,6 +48,10 @@ Repository = 'https://github.com/153957/reloci/'
 reloci = 'reloci.cli:reloci'
 file_info = 'reloci.cli:file_info'
 check_interval = 'reloci.check_interval:main'
+
+[tool.uv.build-backend]
+module-name = 'reloci'
+module-root = ''
 
 [tool.ruff]
 line-length = 120
