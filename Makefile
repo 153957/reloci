@@ -28,7 +28,8 @@ clean:
 
 .PHONY: publish
 publish:
-	flit publish
+	uv build
+	uv publish
 
 .PHONY: demo
 demo:
