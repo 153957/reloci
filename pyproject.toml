@@ -4,7 +4,7 @@ build-backend = "uv_build"
 
 [project]
 name = 'reloci'
-version = '6.0'
+version = '7.0'
 description = 'Organize photos based on exif'
 readme = 'README.md'
 requires-python = '>=3.13'
