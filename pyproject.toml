@@ -38,7 +38,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     'coverage==7.10.7',
-    'ty==0.0.1a22',
+    'ty==0.0.1a23',
 ]
 
 [project.urls]
