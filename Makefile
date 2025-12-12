@@ -1,26 +1,18 @@
-.PHONY: ruffinstall
-ruffinstall:
-	uv pip install --upgrade -r requirements-ruff.txt
-
-.PHONY: devinstall
-devinstall:
-	uv pip install --upgrade --editable .[dev]
-
 .PHONY: test
 test: rufftest typingtest unittests
 
 .PHONY: rufftest
 rufftest:
-	ruff check .
-	ruff format --check .
+	uv run ruff check .
+	uv run ruff format --check .
 
 .PHONY: typingtest
 typingtest:
-	ty check
+	uv run ty check
 
 .PHONY: unittests
 unittests:
-	python -m unittest discover --catch --start-directory tests --top-level-directory .
+	uv run python -m unittest discover --catch --start-directory tests --top-level-directory .
 
 .PHONY: clean
 clean:

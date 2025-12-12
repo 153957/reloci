@@ -4,43 +4,14 @@ on:
   push:
 
 jobs:
-  rufftest:
+  tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@v7
-        with:
-          python-version: '3.13'
-          activate-environment: true
-          cache-dependency-glob: 'requirements-ruff.txt'
-      - run: make ruffinstall
-      - run: make rufftest
-        env:
-          RUFF_FORMAT: github
-
-  typingtest:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: astral-sh/setup-uv@v7
-        with:
-          python-version: '3.13'
-          activate-environment: true
-          cache-dependency-glob: 'pyproject.toml'
-      - run: make devinstall
-      - run: make typingtest
-
-  unittest:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: astral-sh/setup-uv@v7
-        with:
-          python-version: '3.13'
-          activate-environment: true
-          cache-dependency-glob: 'pyproject.toml'
       - run: |
           sudo apt-get update
           sudo apt-get install libimage-exiftool-perl
-      - run: make devinstall
-      - run: make unittests
+      - run: make test
+        env:
+          RUFF_FORMAT: github

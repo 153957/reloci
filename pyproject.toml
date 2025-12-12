@@ -35,10 +35,11 @@ dependencies = [
     'rich==14.2.0',
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     'coverage==7.10.7',
     'ty==0.0.1a23',
+    'ruff==0.14.9',
 ]
 
 [project.urls]

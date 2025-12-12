@@ -4,5 +4,5 @@ clean:
 
 .PHONY: demo
 demo: clean
-	reloci --dryrun source output
-	reloci source output
+	uv run reloci --dryrun source output
+	uv run reloci source output
