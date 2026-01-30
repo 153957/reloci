@@ -32,14 +32,14 @@ classifiers = [
 dependencies = [
     'pyexiftool==0.5.6',
     'python-baseconv==1.2.2',
-    'rich==14.2.0',
+    'rich==14.3.1',
 ]
 
 [dependency-groups]
 dev = [
-    'coverage==7.10.7',
-    'ty==0.0.1a23',
-    'ruff==0.14.9',
+    'coverage==7.13.2',
+    'ty==0.0.14',
+    'ruff==0.14.14',
 ]
 
 [project.urls]
