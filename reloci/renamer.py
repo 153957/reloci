@@ -101,8 +101,8 @@ class Renamer(BaseRenamer):
     """
 
     def encode_timestamp(self, timestamp: float) -> str:
-        microsecond_timestamp = int(1_000 * timestamp)
-        encoded_timestamp: str = baseconv.base36.encode(microsecond_timestamp)
+        millisecond_timestamp = int(1_000 * timestamp)
+        encoded_timestamp: str = baseconv.base36.encode(millisecond_timestamp)
         return encoded_timestamp
 
     def replace_prefix(self, name: str) -> str:
