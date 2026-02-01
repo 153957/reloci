@@ -1,4 +1,3 @@
-import argparse
 import datetime
 import pathlib
 
@@ -79,30 +78,3 @@ def group_sequence(sequence: list[pathlib.Path], sequence_number: int) -> None:
     pathlib.Path(f'sequence_{sequence_number}').mkdir()
     for path in sequence:
         path.rename(f'sequence_{sequence_number}/{path.name}')
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser(description='.')
-    parser.add_argument(
-        '--pattern',
-        default='*.NEF',
-        help='Glob pattern with which to find the input frames.',
-    )
-    parser.add_argument(
-        '--shots_per_interval',
-        type=int,
-        default=1,
-        help='Number of images per interval, e.g. in case of HDR shots.',
-    )
-    parser.add_argument(
-        '--group',
-        action='store_true',
-        help='Group images in the same interval into directories.',
-    )
-    args = parser.parse_args()
-
-    find_sequences(
-        args.pattern,
-        args.shots_per_interval,
-        args.group,
-    )

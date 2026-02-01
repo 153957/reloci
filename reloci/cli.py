@@ -7,6 +7,7 @@ import rich
 
 from exiftool import ExifToolHelper
 
+from reloci.check_interval import find_sequences
 from reloci.file_info import FileInfo
 from reloci.renamer import BaseRenamer, Renamer
 from reloci.worker import Worker
@@ -62,7 +63,9 @@ def reloci() -> None:
 
 
 def get_parser_file_info() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description='Show metadata available for a given file')
+    parser = argparse.ArgumentParser(
+        description='Show metadata available for a given file',
+    )
 
     parser.add_argument('path', type=Path)
 
@@ -86,3 +89,35 @@ def file_info() -> None:
                 info[attr] = None
 
         rich.print(info)
+
+
+def get_parser_check_interval() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description='Search for sequences of images at regular intervals among many images.',
+    )
+
+    parser.add_argument(
+        '--pattern',
+        default='*.NEF',
+        help='Glob pattern with which to find the input frames.',
+    )
+    parser.add_argument(
+        '--shots_per_interval',
+        type=int,
+        default=1,
+        help='Number of images per interval, e.g. in case of HDR shots.',
+    )
+    parser.add_argument(
+        '--group',
+        action='store_true',
+        help='Group images in the same interval into directories.',
+    )
+
+    return parser
+
+
+def check_interval() -> None:
+    parser = get_parser_check_interval()
+    kwargs = vars(parser.parse_args())
+
+    find_sequences(**kwargs)

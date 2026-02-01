@@ -48,7 +48,7 @@ Repository = 'https://github.com/153957/reloci/'
 [project.scripts]
 reloci = 'reloci.cli:reloci'
 file_info = 'reloci.cli:file_info'
-check_interval = 'reloci.check_interval:main'
+check_interval = 'reloci.cli:check_interval'
 
 [tool.uv.build-backend]
 module-name = 'reloci'
