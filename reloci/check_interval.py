@@ -75,6 +75,7 @@ def find_sequences(pattern: str, shots_per_interval: int, group: bool) -> None:
 def group_sequence(sequence: list[pathlib.Path], sequence_number: int) -> None:
     """Group all files in the sequence into a subdirectory in the working directory"""
 
-    pathlib.Path(f'sequence_{sequence_number}').mkdir()
+    group_directory = sequence[0].parent / f'sequence_{sequence_number}'
+    pathlib.Path(group_directory).mkdir()
     for path in sequence:
-        path.rename(f'sequence_{sequence_number}/{path.name}')
+        path.rename(group_directory / path.name)
