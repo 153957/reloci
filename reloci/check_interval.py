@@ -13,7 +13,7 @@ MIN_INTERVAL = datetime.timedelta(seconds=0.4)
 MIN_IMAGES_SEQUENCE = 20
 
 
-def find_sequences(pattern: str, shots_per_interval: int, group: bool) -> None:
+def find_sequences(pattern: str, shots_per_interval: int, *, group: bool) -> None:
     skip = shots_per_interval
     files = sorted(pathlib.Path().glob(pattern))
 

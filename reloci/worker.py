@@ -14,10 +14,11 @@ class Worker:
         self,
         inputpath: Path,
         outputpath: Path,
-        move: bool,
-        dryrun: bool,
         verbose: int,
         renamer: type[BaseRenamer],
+        *,
+        move: bool,
+        dryrun: bool,
     ) -> None:
         self.inputpath = inputpath
         self.outputpath = outputpath

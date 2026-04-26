@@ -11,10 +11,10 @@ class WorkerTestCase(unittest.TestCase):
         self.worker = worker.Worker(
             inputpath=Path(),
             outputpath=Path(),
-            move=True,
-            dryrun=True,
             verbose=0,
             renamer=renamer.Renamer,
+            move=True,
+            dryrun=True,
         )
 
     def test_make_directories(self) -> None:

@@ -43,7 +43,7 @@ dev = [
 ]
 
 [project.urls]
-Repository = 'https://github.com/153957/reloci/'
+Repository = 'https://codeberg.org/153957/reloci/'
 
 [project.scripts]
 reloci = 'reloci.cli:reloci'
@@ -56,7 +56,6 @@ module-root = ''
 
 [tool.ruff]
 line-length = 120
-target-version = 'py311'
 
 [tool.ruff.format]
 quote-style = 'single'  # Prefer single quotes, except for triple quotes strings
@@ -67,9 +66,7 @@ ignore = [
     'CPY001',  # Do not require copyright notices
     'D',  # Ignore docstring checks
     'EM',  # Allow messages directly in exceptions
-    'FBT001',  # Allow positional for boolean arguments
     'FBT002',  # Allow default value for boolean arguments
-    'PD',  # Not using pandas
     'PLR0913',  # Allow functions with many arguments
     'PLR6301',  # Allow not using self in methods
     'PT',  # Not using pytest
@@ -96,3 +93,6 @@ source = [
 show_missing = true
 skip_empty = true
 skip_covered = true
+
+[tool.ty.environment]
+python = "./.venv"
