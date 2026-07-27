@@ -30,11 +30,14 @@ def find_sequences(pattern: str, shots_per_interval: int, *, group: bool) -> Non
     start_of_sequence = image_dates[0].file
     sequence = [start_of_sequence]
     nth_sequence = 1
+    sequence_start_time = image_dates[0].subsecond_datetime
 
     print(
         ' seq',
         '   n',
         'interval',
+        '   start',
+        '     end',
         'sequence',
         sep='\t',
     )
@@ -45,12 +48,15 @@ def find_sequences(pattern: str, shots_per_interval: int, *, group: bool) -> Non
         interval = current.subsecond_datetime - previous.subsecond_datetime
         new_interval = following.subsecond_datetime - current.subsecond_datetime
 
+        # Check for end of a sequence
         if interval < MIN_INTERVAL or abs(interval - new_interval) > MARGIN:
             if len(sequence) > MIN_IMAGES_SEQUENCE:
                 print(
                     f'{nth_sequence:4}',
                     f'{len(sequence):4}',
                     f'{interval.total_seconds():7}s',
+                    f'{sequence_start_time:%H:%M:%S}',
+                    f'{current.subsecond_datetime:%H:%M:%S}',
                     f'{sequence[0]} → {sequence[-1]}',
                     sep='\t',
                 )
@@ -58,13 +64,17 @@ def find_sequences(pattern: str, shots_per_interval: int, *, group: bool) -> Non
                     group_sequence(sequence, nth_sequence)
                 nth_sequence += 1
             sequence = [current.file]
+            sequence_start_time = current.subsecond_datetime
 
     sequence.append(following.file)
+    # Checked all files, handle current sequence
     if len(sequence) > MIN_IMAGES_SEQUENCE:
         print(
             f'{nth_sequence:4}',
             f'{len(sequence):4}',
             f'{new_interval.total_seconds():7}s',
+            f'{sequence_start_time:%H:%M:%S}',
+            f'{following.subsecond_datetime:%H:%M:%S}',
             f'{sequence[0]} → {sequence[-1]}',
             sep='\t',
         )
