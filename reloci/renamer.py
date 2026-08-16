@@ -120,6 +120,7 @@ class Renamer(BaseRenamer):
             .replace('NIKON D90_', 'ARM_')
             .replace('iPhone 5_', 'CBG_')
             .replace('iPhone 13 mini_', 'TRM_')
+            .replace('iPhone 17_', 'CTX_')
             .replace('iPhone SE_', 'CLK_')
             .replace('iPhone SE (1st generation)_', 'CLK_')
             .replace('iPad Pro (10.5-inch)_', 'PAD_')
