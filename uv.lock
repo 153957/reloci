@@ -118,7 +118,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/33/d0/9297d7d8dd74767b4
 
 [[package]]
 name = "reloci"
-version = "7.0"
+version = "8.0"
 source = { editable = "." }
 dependencies = [
     { name = "pyexiftool" },
