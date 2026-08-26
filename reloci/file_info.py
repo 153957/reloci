@@ -1,9 +1,13 @@
 from datetime import UTC, datetime
-from os import stat_result
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from exiftool.exceptions import ExifToolException
-from exiftool.helper import ExifToolHelper
+
+if TYPE_CHECKING:
+    from os import stat_result
+    from pathlib import Path
+
+    from exiftool.helper import ExifToolHelper
 
 TAGS = [
     'Composite:SubSecDateTimeOriginal',

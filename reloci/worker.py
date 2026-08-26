@@ -1,12 +1,16 @@
 import shutil
 
-from collections.abc import KeysView
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from rich.progress import track
 
 from reloci.planner import Map, Planner
-from reloci.renamer import BaseRenamer
+
+if TYPE_CHECKING:
+    from collections.abc import KeysView
+    from pathlib import Path
+
+    from reloci.renamer import BaseRenamer
 
 
 class Worker:

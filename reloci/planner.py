@@ -2,13 +2,17 @@ import collections
 
 from dataclasses import dataclass
 from operator import attrgetter
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from exiftool import ExifToolHelper
 from rich.progress import track
 
 from reloci.file_info import FileInfo
-from reloci.renamer import BaseRenamer
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from reloci.renamer import BaseRenamer
 
 
 @dataclass

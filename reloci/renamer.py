@@ -1,9 +1,11 @@
 from contextlib import suppress
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import baseconv
 
-from reloci.file_info import FileInfo
+if TYPE_CHECKING:
+    from reloci.file_info import FileInfo
 
 
 class BaseRenamer:
