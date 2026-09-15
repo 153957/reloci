@@ -59,6 +59,10 @@ def reloci() -> None:
     parser = get_parser_reloci()
     kwargs = vars(parser.parse_args())
 
+    inputpath = kwargs['inputpath']
+    if not inputpath.exists():
+        raise NotADirectoryError(f'Inputpath "{inputpath}" does not exist.')
+
     Worker(**kwargs).do_the_thing()
 
 
