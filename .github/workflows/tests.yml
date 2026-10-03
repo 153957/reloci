@@ -12,7 +12,7 @@ jobs:
       - run: |
           sudo apt-get update
           sudo apt-get install libimage-exiftool-perl
-      - run: uv tool install --from 'rust-just' just
+      - run: uv tool install 'rust-just==1.58.0'
       - run: just test
         env:
           RUFF_FORMAT: github
