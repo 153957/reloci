@@ -30,16 +30,16 @@ classifiers = [
     'Topic :: Desktop Environment :: File Managers',
 ]
 dependencies = [
-    'pyexiftool==0.5.6',
-    'python-baseconv==1.2.2',
-    'rich==15.0.0',
+    'pyexiftool~=0.5.6',
+    'python-baseconv~=1.2.2',
+    'rich~=15.0.0',
 ]
 
 [dependency-groups]
 dev = [
-    'coverage==7.15.4',
-    'ty==0.0.72',
-    'ruff==0.16.3',
+    'coverage~=7.15.4',
+    'ty~=0.0.84',
+    'ruff~=0.16.10',
 ]
 
 [project.urls]

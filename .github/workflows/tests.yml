@@ -7,11 +7,12 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: astral-sh/setup-uv@v7
+      - uses: actions/checkout@v7.0.1
+      - uses: astral-sh/setup-uv@v10.2.0
       - run: |
           sudo apt-get update
           sudo apt-get install libimage-exiftool-perl
-      - run: make test
+      - run: uv tool install --from 'rust-just' just
+      - run: just test
         env:
           RUFF_FORMAT: github
