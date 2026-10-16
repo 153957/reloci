@@ -39,7 +39,7 @@ dependencies = [
 dev = [
     'coverage~=7.16.2',
     'ty~=0.0.84',
-    'ruff~=0.16.10',
+    'ruff>=0.16.10,<0.18.0',
 ]
 
 [project.urls]
